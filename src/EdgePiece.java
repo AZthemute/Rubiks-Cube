@@ -2,8 +2,8 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class EdgePiece extends Piece {
-    public EdgePiece(HashMap<Rotation, Color> colors, Rotation facing) {
-        super(colors, facing);
+    public EdgePiece(HashMap<Rotation, Color> colors) {
+        super(colors);
         // todo: throw IllegalArgumentException if there are not 2 colors present
     }
 
