@@ -12,19 +12,24 @@ public class Algorithm {
         // todo
     }
 
-    public void execute() {
+    public Cube execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed
+        for (Move move : moves) {
+            cube.move(move.type, move.isPrime);
+        }
+        return cube;
     }
 
     /**
      * Helper class for one move.
      */
     private static class Move {
-        Rotation type;
-        boolean prime;
+        final Rotation type;
+        final boolean isPrime;
+
         public Move(Rotation type, boolean isPrime) {
             this.type = type;
-            this.prime = isPrime;
+            this.isPrime = isPrime;
         }
     }
 }
