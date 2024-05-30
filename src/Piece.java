@@ -22,6 +22,12 @@ public abstract class Piece {
 
     public Piece(HashMap<Rotation, Color> colors) {
         this.colors = colors;
+        colors.putIfAbsent(Rotation.BACK, null);
+        colors.putIfAbsent(Rotation.RIGHT, null);
+        colors.putIfAbsent(Rotation.FRONT, null);
+        colors.putIfAbsent(Rotation.LEFT, null);
+        colors.putIfAbsent(Rotation.UP, null);
+        colors.putIfAbsent(Rotation.DOWN, null);
     }
 
     /**
@@ -30,7 +36,7 @@ public abstract class Piece {
      * This method only moves around the colours, since the position
      * of the piece on the cube is tracked by the Cube object.
      */
-    public void moveR() {
+    public HashMap<Rotation, Color> moveR() {
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
 
@@ -49,31 +55,40 @@ public abstract class Piece {
         // Keep in mind these are all assuming green front and white top.
         switch (getPieceType()) {
             case EDGE -> {
+                // Top layer
+                if ((oldColors.get(Rotation.UP) != null)) {
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
+                }
+                // Bottom layer
+                else if ((oldColors.get(Rotation.DOWN) != null)) {
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
+                }
+                // Middle front layer
+                else if ((oldColors.get(Rotation.FRONT) != null)) {
+                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                }
+                // Middle back layer
+                else {
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
+                }
+
+                // These colours will always stay in the same place. If there is no colour
+                // for one of these, it will simply be null.
+                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
+                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CORNER -> {
+                // Top layer
                 if ((oldColors.get(Rotation.UP) != null)) {
                     // This is the white, green, red/orange corner.
-                    if (oldColors.get(Rotation.FRONT) != null) {
-                        colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
-                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
-                    }
-                    // This is the white, blue, red/orange corner.
-                    else if (oldColors.get(Rotation.BACK) != null) {
-                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
-                        colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
-                    }
+                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                 }
+                // Bottom layer
                 else if ((oldColors.get(Rotation.DOWN) != null)) {
                     // This is the yellow, green, red/orange corner.
-                    if (oldColors.get(Rotation.FRONT) != null) {
-                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
-                        colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
-                    }
-                    // This is the yellow, blue, red/orange corner.
-                    else if (oldColors.get(Rotation.BACK) != null) {
-                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
-                        colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
-                    }
+                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
 
                 // These colours will always stay in the same place. If there is no colour
@@ -82,33 +97,16 @@ public abstract class Piece {
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CENTER -> {
+                // Simply don't move the piece.
+                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
+                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
         }
+        return colors;
     }
 
-    public Color getColor(Rotation face) {
-        switch (face) {
-            case BACK -> {
-                return colors.get(Rotation.BACK);
-            }
-            case RIGHT -> {
-                return colors.get(Rotation.RIGHT);
-            }
-            case FRONT -> {
-                return colors.get(Rotation.FRONT);
-            }
-            case LEFT -> {
-                return colors.get(Rotation.LEFT);
-            }
-            case UP -> {
-                return colors.get(Rotation.UP);
-            }
-            case DOWN -> {
-                return colors.get(Rotation.DOWN);
-            }
-        }
-        return null;
-    }
+    // To make other moves: Rotate around the colours (look at cube to understand how to rotate)
+    // then do moveR(), then rotate around the colours back to normal (again, look at cube)
 
     public abstract PieceType getPieceType();
 
