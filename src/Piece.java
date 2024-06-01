@@ -43,16 +43,18 @@ public abstract class Piece {
         // Reset the piece's colours
         this.colors = new HashMap<>(defaultColors);
 
-        // It is easiest to understand this method if you have an actual cube on hand.
-        // Pay attention to how the stickers move. This code was tested using the
-        // white, green, red piece, while the cube is facing with green front and white
-        // top, as reference.
-        //
-        // The following if else chains check which colours are on the piece and
-        // then moves them accordingly.
-        //
-        // To aid understanding, comments will explain what pieces were used as a reference.
-        // Keep in mind these are all assuming green front and white top.
+        /*
+         It is easiest to understand this method if you have an actual cube on hand.
+         Pay attention to how the stickers move. This code was tested using the
+         white, green, red piece, while the cube is facing with green front and white
+         top, as reference.
+
+         The following if else chains check which colours are on the piece and
+         then moves them accordingly.
+
+         To aid understanding, comments will explain what pieces were used as a reference.
+         Keep in mind these are all assuming green front and white top.
+        */
         switch (getPieceType()) {
             case EDGE -> {
                 // Top layer

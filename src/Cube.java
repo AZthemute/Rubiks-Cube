@@ -20,11 +20,45 @@ public class Cube {
         };
     }
 
-    // Helper method for constructor.
-    private static HashMap<Rotation, HashMap<Rotation, Piece>> constructYLayer() {
-        HashMap<Rotation, Piece> upLayer = constructZLayer();
-        HashMap<Rotation, Piece> equatorLayer = constructZLayer();
-        HashMap<Rotation, Piece> downLayer = constructZLayer();
+    /**
+     * Helper method for constructor.
+     */
+    private static HashMap<Rotation, HashMap<Rotation, Piece>> constructYLayer(Rotation xCoordinate) {
+        /*
+         Since these are only used for the construction of the cube, hardcoding the pieces
+         to construct with is okay.
+        */
+        HashMap<Rotation, Piece> upLayer;
+        HashMap<Rotation, Piece> equatorLayer;
+        HashMap<Rotation, Piece> downLayer;
+        switch (xCoordinate) {
+            // Construct up layer pieces
+            case LEFT -> {
+                CornerPiece UFL = new CornerPiece(new HashMap<>() {
+                    {
+                        put(Rotation.LEFT, Color.ORANGE);
+                        put(Rotation.UP, Color.WHITE);
+                        put(Rotation.FRONT, Color.GREEN);
+                    }
+                });
+                EdgePiece MFL = new EdgePiece(new HashMap<>() {
+                    {
+                        put(Rotation.LEFT, Color.ORANGE);
+                        put(Rotation.UP, Color.WHITE);
+                    }
+                });
+                CornerPiece DFL = new CornerPiece(new HashMap<>() {
+                    {
+                        put(Rotation.LEFT, Color.ORANGE);
+                        put(Rotation.UP, Color.WHITE);
+                        put(Rotation.BACK, Color.BLUE);
+                    }
+                });
+                upLayer = constructZLayer(UFL, MFL, DFL);
+            }
+            default -> throw new IllegalArgumentException("Invalid X co-ordinate: " + xCoordinate);
+        }
+
         HashMap<Rotation, HashMap<Rotation, Piece>> layer = new HashMap<>() {
             {
                 put(Rotation.UP, upLayer);
@@ -35,7 +69,9 @@ public class Cube {
         return layer;
     }
 
-    // Helper method for constructor.
+    /**
+     * Helper method for constructor.
+     */
     private static HashMap<Rotation, Piece> constructZLayer(Piece frontPiece, Piece standingPiece, Piece backPiece) {
         return new HashMap<>() {
             {
@@ -50,9 +86,9 @@ public class Cube {
      * Get a single piece. All parameters are move notation. Blindfolded notation refers to
      * singular pieces by using the layers that the piece is on, for example UFR refers to
      * the top right piece on the front. The parameters of this function act the same way.
-     * @param x L/M/R: Which layer on the x co-ordinate the piece is on
-     * @param y U/E/D: Which layer on the y co-ordinate the piece is on
-     * @param z F/S/B: Which layer on the z co-ordinate the piece is on
+     * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
+     * @param y Up/Equator/Down: Which layer on the y co-ordinate the piece is on
+     * @param z Front/Standing/Back: Which layer on the z co-ordinate the piece is on
      * @return The piece
      */
     public Piece getPiece(Rotation x, Rotation y, Rotation z) {
