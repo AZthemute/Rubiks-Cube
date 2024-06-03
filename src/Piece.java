@@ -117,7 +117,7 @@ public abstract class Piece {
     }
 
     public void display() {
+        System.out.println(getPieceType());
         System.out.println(colors);
-        System.out.println();
     }
 }
