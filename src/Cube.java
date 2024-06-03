@@ -241,7 +241,16 @@ public class Cube {
          */
     }
 
-    public Cube move(Rotation type, boolean isPrime) {
+    /**
+     * Simulates one R move. This is a helper method for the move() method
+     * @return The cube.
+     */
+    private Cube moveR() {
+        // todo
+        return this;
+    }
+
+    public Cube move(Rotation type, boolean isPrime, boolean isDouble) {
         // todo
         return this;
     }
