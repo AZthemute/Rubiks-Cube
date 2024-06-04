@@ -242,7 +242,7 @@ public class Cube {
     }
 
     /**
-     * Simulates one R move. This is a helper method for the move() method
+     * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
     private Cube moveR() {
@@ -252,6 +252,9 @@ public class Cube {
 
     public Cube move(Rotation type, boolean isPrime, boolean isDouble) {
         // todo
+        if (isDouble) {
+            move(type, isPrime, false);
+        }
         return this;
     }
 

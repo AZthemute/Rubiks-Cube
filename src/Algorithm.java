@@ -1,19 +1,22 @@
 import java.util.ArrayList;
 
 /**
- * Represents a set of moves on the cube.
+ * Represents a set of moves on the cube. May be turned into static later.
  */
 public class Algorithm {
     private ArrayList<Move> moves = new ArrayList<>();
 
     /**
-     *
-     * @param alg The algorithm, e.g. `R' L2 D U' B2 U2`
+     * Construct a new Algorithm. This currently does not support wide
+     * notation, such as r or 2R. Additionally, R2' is treated as R2 since
+     * these result in the same thing when executed.
+     * @param alg The algorithm, e.g. R' L2 D U' B2 U2
      */
     public Algorithm(String alg) {
         String[] splitAlgorithm = alg.split(" ");
         for (String move: splitAlgorithm) {
-            if (move.length() > 3) {
+            System.out.println(move);
+            if (move.length() > 2) {
                 throw new IllegalArgumentException("Move " + move + " is invalid.");
             }
             Rotation moveType;
@@ -32,19 +35,25 @@ public class Algorithm {
                 case 'R' -> moveType = Rotation.RIGHT;
                 default -> throw new IllegalArgumentException("Move type " + move.charAt(0) + " is invalid.");
             }
+
+            // Check modifiers, if any
             if (move.length() == 2) {
                 if (move.charAt(1) == '\'') {
                     isPrime = true;
                 }
-                else if ((move.charAt(2) == '2') && (move.length() == 3)) {
+                else if (move.charAt(1) == '2') {
                     isDouble = true;
                 }
             }
-
             moves.add(new Move(moveType, isPrime, isDouble));
         }
     }
 
+    /**
+     * Executes this algorithm on a cube.
+     * @param cube The cube.
+     * @return
+     */
     public Cube execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed
         for (Move move : moves) {
