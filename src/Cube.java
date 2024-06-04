@@ -117,6 +117,18 @@ public class Cube {
         }
 
         /**
+         * Get a single yLayer of this xLayer.
+         * @param layer Left/Middle/Right
+         * @return The yLayer.
+         */
+        public yLayer get(Rotation layer) {
+            if ((layer != Rotation.LEFT) && (layer != Rotation.MIDDLE) && (layer != Rotation.RIGHT)) {
+                throw new IllegalArgumentException("layer must be one of: LEFT, MIDDLE, RIGHT");
+            }
+            return layers.get(layer);
+        }
+
+        /**
          * Helper method for constructing pieces easier. It automatically
          * determines the positions of colors on a given piece.
          * This should be used in combination with a method to construct
@@ -204,6 +216,18 @@ public class Cube {
                     System.out.println("(Core position skipped)");
                 }
             }
+        }
+
+        /**
+         * Get a single piece of this yLayer.
+         * @param layer Front/Standing/Back
+         * @return The piece.
+         */
+        public Piece get(Rotation layer) {
+            if ((layer != Rotation.FRONT) && (layer != Rotation.STANDING) && (layer != Rotation.BACK)) {
+                throw new IllegalArgumentException("layer must be one of: FRONT, STANDING, BACK");
+            }
+            return pieces.get(layer);
         }
     }
 
