@@ -15,7 +15,6 @@ public class Algorithm {
     public Algorithm(String alg) {
         String[] splitAlgorithm = alg.split(" ");
         for (String move: splitAlgorithm) {
-            System.out.println(move);
             if (move.length() > 2) {
                 throw new IllegalArgumentException("Move " + move + " is invalid.");
             }
@@ -52,7 +51,7 @@ public class Algorithm {
     /**
      * Executes this algorithm on a cube.
      * @param cube The cube.
-     * @return
+     * @return The cube.
      */
     public Cube execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed

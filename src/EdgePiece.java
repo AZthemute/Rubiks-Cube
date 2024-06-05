@@ -6,6 +6,16 @@ public class EdgePiece extends Piece {
         // todo: throw IllegalArgumentException if there are not 2 colors present
     }
 
+    /**
+     * @param colors Unordered array of colors that the piece contains.
+     */
+    public EdgePiece(Color[] colors) {
+        super(buildPieceColors(colors));
+        if (colors.length != 2) {
+            throw new IllegalArgumentException("An edge piece can only have 2 colours.");
+        }
+    }
+
     @Override
     public PieceType getPieceType() {
         return PieceType.EDGE;

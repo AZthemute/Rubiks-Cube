@@ -16,10 +16,6 @@ public abstract class Piece {
         }
     };
 
-    /**
-     * Current orientation of piece, judged by the cube when it's facing with green front and white top.
-     */
-
     public Piece(HashMap<Rotation, Color> colors) {
         this.colors = colors;
         colors.putIfAbsent(Rotation.BACK, null);
@@ -105,6 +101,30 @@ public abstract class Piece {
             }
         }
         return colors;
+    }
+
+    /**
+     * Helper method for constructing pieces easier. It automatically
+     * determines the positions of colors on a given piece.
+     * This should be used in combination with a method to construct
+     * @param colors Unordered array of colors that the piece contains.
+     * @return HashMap of colors to use for constructing a piece.
+     */
+    protected static HashMap<Rotation, Color> buildPieceColors(Color[] colors) {
+        // Initialise empty HashMap
+        HashMap<Rotation, Color> pieceColors = new HashMap<>();
+
+        for (Color color : colors) {
+            switch (color) {
+                case WHITE -> pieceColors.put(Rotation.UP, Color.WHITE);
+                case GREEN -> pieceColors.put(Rotation.FRONT, Color.GREEN);
+                case RED -> pieceColors.put(Rotation.RIGHT, Color.RED);
+                case ORANGE -> pieceColors.put(Rotation.LEFT, Color.ORANGE);
+                case YELLOW -> pieceColors.put(Rotation.DOWN, Color.YELLOW);
+                case BLUE -> pieceColors.put(Rotation.BACK, Color.BLUE);
+            }
+        }
+        return pieceColors;
     }
 
     // To make other moves: Rotate around the colours (look at cube to understand how to rotate)
