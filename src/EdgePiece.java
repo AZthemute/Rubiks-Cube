@@ -16,6 +16,13 @@ public class EdgePiece extends Piece {
         }
     }
 
+    /**
+     * Copy constructor
+     */
+    public EdgePiece(EdgePiece other) {
+        super(new HashMap<>(other.colors));
+    }
+
     @Override
     public PieceType getPieceType() {
         return PieceType.EDGE;

@@ -16,6 +16,13 @@ public class CornerPiece extends Piece {
         }
     }
 
+    /**
+     * Copy constructor
+     */
+    public CornerPiece(CornerPiece other) {
+        super(new HashMap<>(other.colors));
+    }
+
     @Override
     public PieceType getPieceType() {
         return PieceType.CORNER;

@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class Cube {
-    private HashMap<Rotation, xLayer> pieces;
+    private HashMap<Rotation, xLayer> layers;
 
     /**
      * Creates a solved cube.
@@ -11,7 +11,7 @@ public class Cube {
         xLayer middleLayer = new xLayer(Rotation.MIDDLE);
         xLayer rightLayer = new xLayer(Rotation.RIGHT);
         // The final cube layer: x co-ordinate.
-        pieces = new HashMap<>() {
+        layers = new HashMap<>() {
             {
                 put(Rotation.LEFT, leftLayer);
                 put(Rotation.MIDDLE, middleLayer);
@@ -118,7 +118,7 @@ public class Cube {
 
         /**
          * Get a single yLayer of this xLayer.
-         * @param layer Left/Middle/Right
+         * @param layer Up/Equator/Down
          * @return The yLayer.
          */
         public yLayer get(Rotation layer) {
@@ -154,7 +154,7 @@ public class Cube {
                     piece.display();
                 }
                 else {
-                    System.out.println("(Core position skipped)");
+                    System.out.println("(Core position skipped)"); // The only null position will be the core
                 }
             }
         }
@@ -175,7 +175,9 @@ public class Cube {
     /**
      * Get a single piece. All parameters are move notation. Refer to singular pieces by
      * using the layers that the piece is on, for example UFR refers to the top right
-     * piece on the front. The parameters of this function act the same way.
+     * piece on the front. The parameters of this function act the same way, although
+     * importantly this uses an XYZ system, so UFR would actually be RUF. This may be
+     * changed in the future.
      * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
      * @param y Up/Equator/Down: Which layer on the y co-ordinate the piece is on
      * @param z Front/Standing/Back: Which layer on the z co-ordinate the piece is on
@@ -186,14 +188,14 @@ public class Cube {
         xLayer xLayer;
         yLayer yLayer;
         switch (x) {
-            case LEFT, RIGHT -> xLayer = pieces.get(x);
+            case LEFT, RIGHT -> xLayer = layers.get(x);
             case MIDDLE -> {
                 // Check if the core is being chosen
                 if ((y == Rotation.EQUATOR) && (z == Rotation.STANDING)) {
                     throw new IllegalArgumentException("tried to get the core at MIDDLE, EQUATOR, STANDING, which is not a piece.");
                 }
                 else {
-                    xLayer = pieces.get(x);
+                    xLayer = layers.get(x);
                 }
             }
             default -> throw new IllegalArgumentException("Invalid X co-ordinate: " + x);
@@ -213,8 +215,43 @@ public class Cube {
      * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
-    private Cube moveR() {
+    public Cube moveR() {
         // todo
+        xLayer rightLayer = layers.get(Rotation.RIGHT);
+
+        // Get pieces
+        Piece UFR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.FRONT));
+        Piece UBR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.BACK));
+        Piece DBR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.BACK));
+        Piece DFR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.FRONT));
+
+        Piece USR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.STANDING));
+        Piece EBR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.BACK));
+        Piece DSR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.STANDING));
+        Piece EFR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.FRONT));
+
+        // Call move methods on them
+        UFR.moveR();
+        UBR.moveR();
+        DBR.moveR();
+        DFR.moveR();
+        USR.moveR();
+        EBR.moveR();
+        DSR.moveR();
+        EFR.moveR();
+
+        // Cycle pieces around
+        // rightLayer.get(yTarget).pieces.put(zTarget, x) // yzx
+        rightLayer.get(Rotation.UP).pieces.put(Rotation.BACK, UFR); // UFR -> UBR
+        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.BACK, UBR); // UBR -> DBR
+        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.FRONT, DBR); // DBR -> DFR
+        rightLayer.get(Rotation.UP).pieces.put(Rotation.FRONT, DFR); // DFR -> UFR
+
+        rightLayer.get(Rotation.EQUATOR).pieces.put(Rotation.BACK, USR); // USR -> EBR
+        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.STANDING, EBR); // EBR -> DSR
+        rightLayer.get(Rotation.EQUATOR).pieces.put(Rotation.FRONT, DSR); // DSR -> EFR
+        rightLayer.get(Rotation.UP).pieces.put(Rotation.STANDING, EFR); // EFR -> USR
+
         return this;
     }
 
@@ -227,7 +264,7 @@ public class Cube {
     }
 
     public void display() {
-        for (xLayer layer: pieces.values()) {
+        for (xLayer layer: layers.values()) {
             layer.display();
         }
     }

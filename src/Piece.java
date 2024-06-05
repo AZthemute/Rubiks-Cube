@@ -4,7 +4,7 @@ public abstract class Piece {
     /**
      * Positions of colors on the piece.
      */
-    private HashMap<Rotation, Color> colors;
+    protected HashMap<Rotation, Color> colors;
     private static final HashMap<Rotation, Color> defaultColors = new HashMap<>() {
         {
             put(Rotation.BACK, null);
