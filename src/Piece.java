@@ -54,15 +54,15 @@ public abstract class Piece {
         switch (getPieceType()) {
             case EDGE -> {
                 // Top layer
-                if ((oldColors.get(Rotation.UP) != null)) {
+                if (oldColors.get(Rotation.UP) != null) {
                     colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                 }
                 // Bottom layer
-                else if ((oldColors.get(Rotation.DOWN) != null)) {
+                else if (oldColors.get(Rotation.DOWN) != null) {
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
                 // Middle front layer
-                else if ((oldColors.get(Rotation.FRONT) != null)) {
+                else if (oldColors.get(Rotation.FRONT) != null) {
                     colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                 }
                 // Middle back layer
@@ -78,14 +78,26 @@ public abstract class Piece {
             case CORNER -> {
                 // Top layer
                 if ((oldColors.get(Rotation.UP) != null)) {
-                    // This is the white, green, red/orange corner.
-                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    // UBx to DBx
+                    if (oldColors.get(Rotation.FRONT) != null) {
+                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    }
+                    // UFx to UBx
+                    else {
+                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
+                    }
                     colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                 }
                 // Bottom layer
-                else if ((oldColors.get(Rotation.DOWN) != null)) {
-                    // This is the yellow, green, red/orange corner.
-                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                else if (oldColors.get(Rotation.DOWN) != null) {
+                    // DBx to DFx
+                    if (oldColors.get(Rotation.BACK) != null) {
+                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
+                    }
+                    // DFx to UFx
+                    else {
+                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    }
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
 
