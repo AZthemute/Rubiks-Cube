@@ -115,6 +115,108 @@ public abstract class Piece {
         return colors;
     }
 
+    public void move(Rotation move, boolean isPrime, boolean isDouble) {
+        // This works by temporarily rotating pieces
+        switch (move) {
+            case BACK -> {
+            }
+            case RIGHT -> {
+                if (!isPrime) {
+                    move(Rotation.CubeRotation.Z, true, false);
+                    moveR();
+                    move(Rotation.CubeRotation.Z, false, false);
+                }
+                else {
+                    move(Rotation.CubeRotation.Z, false, false);
+                    moveR();
+                    move(Rotation.CubeRotation.Z, true, false);
+                }
+            }
+            case FRONT -> {
+            }
+            case LEFT -> {
+            }
+            case UP -> {
+                move(Rotation.CubeRotation.Z, false, isDouble);
+                moveR();
+                move(Rotation.CubeRotation.Z, true, isDouble);
+            }
+            case DOWN -> {
+            }
+            case MIDDLE -> {
+            }
+            case EQUATOR -> {
+            }
+            case STANDING -> {
+            }
+        }
+    }
+
+    /**
+     * Rotate a single piece.
+     * @param type X/Y/Z
+     * @param isPrime If the move is prime or not.
+     * @param isDouble If the move is double or not.
+     */
+    public void move(Rotation.CubeRotation type, boolean isPrime, boolean isDouble) {
+        if (isDouble) {
+            move(type, isPrime, false);
+        }
+        // Copy the old colors into a new array for moving around later
+        HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
+
+        // Reset the piece's colours
+        this.colors = new HashMap<>(defaultColors);
+        switch (type) {
+            case X -> {
+                // Move the colours to simulate a cube rotation
+                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
+                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
+                if (!isPrime) {
+                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
+                }
+                else {
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.UP));
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.FRONT));
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.DOWN));
+                }
+            }
+            case Y -> {
+                // Move the colours to simulate a cube rotation
+                colors.put(Rotation.UP, oldColors.get(Rotation.UP));
+                colors.put(Rotation.DOWN, oldColors.get(Rotation.DOWN));
+                if (!isPrime) {
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.RIGHT));
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.LEFT));
+                    colors.put(Rotation.LEFT, oldColors.get(Rotation.BACK));
+                }
+                else {
+                    colors.put(Rotation.RIGHT, oldColors.get(Rotation.BACK));
+                    colors.put(Rotation.LEFT, oldColors.get(Rotation.FRONT));
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.LEFT));
+                }
+            }
+            case Z -> {
+                // Move the colours to simulate a cube rotation
+                colors.put(Rotation.FRONT, oldColors.get(Rotation.FRONT));
+                colors.put(Rotation.BACK, oldColors.get(Rotation.BACK));
+                if (!isPrime) {
+                    colors.put(Rotation.RIGHT, oldColors.get(Rotation.UP));
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
+                    colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
+                }
+                else {
+                    // Temporarily move the colours to simulate a cube rotation
+                    colors.put(Rotation.LEFT, oldColors.get(Rotation.UP));
+                    colors.put(Rotation.RIGHT, oldColors.get(Rotation.DOWN));
+                    colors.put(Rotation.UP, oldColors.get(Rotation.RIGHT));
+                }
+            }
+        }
+    }
+
     /**
      * Helper method for constructing pieces easier. It automatically
      * determines the positions of colors on a given piece.
