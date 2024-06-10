@@ -1,3 +1,4 @@
+import javax.swing.event.ListDataEvent;
 import java.util.HashMap;
 
 public abstract class Piece {
@@ -32,7 +33,10 @@ public abstract class Piece {
      * This method only moves around the colours, since the position
      * of the piece on the cube is tracked by the Cube object.
      */
-    public HashMap<Rotation, Color> moveR() {
+    public HashMap<Rotation, Color> moveR(boolean isPrime) {
+        if (isPrime) {
+            move(Rotation.CubeRotation.Z, true, true);
+        }
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
 
@@ -112,6 +116,9 @@ public abstract class Piece {
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
         }
+        if (isPrime) {
+            move(Rotation.CubeRotation.Z, true, true);
+        }
         return colors;
     }
 
@@ -121,25 +128,23 @@ public abstract class Piece {
             case BACK -> {
             }
             case RIGHT -> {
-                if (!isPrime) {
-                    move(Rotation.CubeRotation.Z, true, false);
-                    moveR();
-                    move(Rotation.CubeRotation.Z, false, false);
-                }
-                else {
-                    move(Rotation.CubeRotation.Z, false, false);
-                    moveR();
-                    move(Rotation.CubeRotation.Z, true, false);
-                }
+                moveR(isPrime);
             }
             case FRONT -> {
             }
             case LEFT -> {
             }
             case UP -> {
-                move(Rotation.CubeRotation.Z, false, isDouble);
-                moveR();
-                move(Rotation.CubeRotation.Z, true, isDouble);
+                if (!isPrime) {
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                    moveR(false);
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                }
+                else {
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                    moveR(true);
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                }
             }
             case DOWN -> {
             }

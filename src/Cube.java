@@ -137,7 +137,7 @@ public class Cube {
             }
         }
 
-        public void moveR() {
+        public void moveR(boolean isPrime) {
             // Hashmap of temp pieces to avoid a lot of declarations
             HashMap<String, Piece> tempPieces = new HashMap<>();
             if (this.xCoordinate == Rotation.MIDDLE) {
@@ -176,7 +176,7 @@ public class Cube {
             layers.get(Rotation.EQUATOR).pieces.put(Rotation.FRONT, tempPieces.get("DSx")); // DSx -> EFx
             layers.get(Rotation.UP).pieces.put(Rotation.STANDING, tempPieces.get("EFx")); // EFx -> USx
             for (yLayer layer: layers.values()) {
-                layer.moveR();
+                layer.moveR(isPrime);
             }
         }
     }
@@ -217,10 +217,10 @@ public class Cube {
             return pieces.get(layer);
         }
 
-        public void moveR() {
+        public void moveR(boolean isPrime) {
             for (Piece piece: pieces.values()) {
                 if (piece != null) {
-                    piece.moveR();
+                    piece.moveR(isPrime);
                 }
             }
         }
@@ -265,25 +265,13 @@ public class Cube {
         return piece;
     }
 
-    private void movePieces(Piece[] pieces) {
-        for (Piece piece: pieces) {
-            piece.moveR();
-        }
-    }
-
-    public void test() {
-        for (xLayer layer: layers.values()) {
-            layer.moveR();
-        }
-    }
-
     /**
      * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
-    public Cube moveR() {
+    public Cube moveR(boolean isPrime) {
         for (xLayer layer: layers.values()) {
-            layer.moveR();
+            layer.moveR(isPrime);
         }
         return this;
     }
@@ -292,6 +280,25 @@ public class Cube {
         // todo
         if (isDouble) {
             move(type, isPrime, false);
+        }
+        switch (type) {
+            case BACK -> {
+            }
+            case RIGHT -> moveR(isPrime);
+            case FRONT -> {
+            }
+            case LEFT -> {
+            }
+            case UP -> {
+            }
+            case DOWN -> {
+            }
+            case MIDDLE -> {
+            }
+            case EQUATOR -> {
+            }
+            case STANDING -> {
+            }
         }
         return this;
     }
