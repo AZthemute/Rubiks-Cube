@@ -22,8 +22,11 @@ public class Cube {
 
     private class xLayer {
         HashMap<Rotation, yLayer> layers;
+        Rotation xCoordinate;
 
         public xLayer(Rotation xCoordinate) {
+            this.xCoordinate = xCoordinate;
+
             yLayer upLayer;
             yLayer equatorLayer;
             yLayer downLayer;
@@ -133,6 +136,49 @@ public class Cube {
                 layer.display();
             }
         }
+
+        public void moveR() {
+            // Hashmap of temp pieces to avoid a lot of declarations
+            HashMap<String, Piece> tempPieces = new HashMap<>();
+            if (this.xCoordinate == Rotation.MIDDLE) {
+                // todo: move the pieces properly (they just need different instantiation)
+                tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
+                tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
+                tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
+                tempPieces.put("DFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
+
+                tempPieces.put("USx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.STANDING)));
+                tempPieces.put("EBx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.BACK)));
+                tempPieces.put("DSx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.STANDING)));
+                tempPieces.put("EFx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
+            }
+            else {
+                tempPieces.put("UFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
+                tempPieces.put("UBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
+                tempPieces.put("DBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
+                tempPieces.put("DFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
+
+                tempPieces.put("USx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.STANDING)));
+                tempPieces.put("EBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.BACK)));
+                tempPieces.put("DSx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.STANDING)));
+                tempPieces.put("EFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
+            }
+
+            // Cycle pieces around
+            // rightLayer.get(yTarget).pieces.put(zTarget, x) // yzx
+            layers.get(Rotation.UP).pieces.put(Rotation.BACK, tempPieces.get("UFx")); // UFx -> UBx
+            layers.get(Rotation.DOWN).pieces.put(Rotation.BACK, tempPieces.get("UBx")); // UBx -> DBx
+            layers.get(Rotation.DOWN).pieces.put(Rotation.FRONT, tempPieces.get("DBx")); // DBx -> DFx
+            layers.get(Rotation.UP).pieces.put(Rotation.FRONT, tempPieces.get("DFx")); // DFx -> UFx
+
+            layers.get(Rotation.EQUATOR).pieces.put(Rotation.BACK, tempPieces.get("USx")); // USx -> EBx
+            layers.get(Rotation.DOWN).pieces.put(Rotation.STANDING, tempPieces.get("EBx")); // EBx -> DSx
+            layers.get(Rotation.EQUATOR).pieces.put(Rotation.FRONT, tempPieces.get("DSx")); // DSx -> EFx
+            layers.get(Rotation.UP).pieces.put(Rotation.STANDING, tempPieces.get("EFx")); // EFx -> USx
+            for (yLayer layer: layers.values()) {
+                layer.moveR();
+            }
+        }
     }
 
     private class yLayer {
@@ -169,6 +215,14 @@ public class Cube {
                 throw new IllegalArgumentException("layer must be one of: FRONT, STANDING, BACK");
             }
             return pieces.get(layer);
+        }
+
+        public void moveR() {
+            for (Piece piece: pieces.values()) {
+                if (piece != null) {
+                    piece.moveR();
+                }
+            }
         }
     }
 
@@ -211,47 +265,26 @@ public class Cube {
         return piece;
     }
 
+    private void movePieces(Piece[] pieces) {
+        for (Piece piece: pieces) {
+            piece.moveR();
+        }
+    }
+
+    public void test() {
+        for (xLayer layer: layers.values()) {
+            layer.moveR();
+        }
+    }
+
     /**
      * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
     public Cube moveR() {
-        // todo
-        xLayer rightLayer = layers.get(Rotation.RIGHT);
-
-        // Get pieces
-        Piece UFR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.FRONT));
-        Piece UBR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.BACK));
-        Piece DBR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.BACK));
-        Piece DFR = new CornerPiece((CornerPiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.FRONT));
-
-        Piece USR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.UP, Rotation.STANDING));
-        Piece EBR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.BACK));
-        Piece DSR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.STANDING));
-        Piece EFR = new EdgePiece((EdgePiece) getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.FRONT));
-
-        // Call move methods on them
-        UFR.moveR();
-        UBR.moveR();
-        DBR.moveR();
-        DFR.moveR();
-        USR.moveR();
-        EBR.moveR();
-        DSR.moveR();
-        EFR.moveR();
-
-        // Cycle pieces around
-        // rightLayer.get(yTarget).pieces.put(zTarget, x) // yzx
-        rightLayer.get(Rotation.UP).pieces.put(Rotation.BACK, UFR); // UFR -> UBR
-        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.BACK, UBR); // UBR -> DBR
-        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.FRONT, DBR); // DBR -> DFR
-        rightLayer.get(Rotation.UP).pieces.put(Rotation.FRONT, DFR); // DFR -> UFR
-
-        rightLayer.get(Rotation.EQUATOR).pieces.put(Rotation.BACK, USR); // USR -> EBR
-        rightLayer.get(Rotation.DOWN).pieces.put(Rotation.STANDING, EBR); // EBR -> DSR
-        rightLayer.get(Rotation.EQUATOR).pieces.put(Rotation.FRONT, DSR); // DSR -> EFR
-        rightLayer.get(Rotation.UP).pieces.put(Rotation.STANDING, EFR); // EFR -> USR
-
+        for (xLayer layer: layers.values()) {
+            layer.moveR();
+        }
         return this;
     }
 

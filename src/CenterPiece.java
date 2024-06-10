@@ -13,6 +13,13 @@ public class CenterPiece extends Piece {
         super(buildPieceColors(new Color[] {color}));
     }
 
+    /**
+     * Copy constructor
+     */
+    public CenterPiece(CenterPiece other) {
+        super(new HashMap<>(other.colors));
+    }
+
     @Override
     public PieceType getPieceType() {
         return PieceType.CENTER;
