@@ -122,6 +122,12 @@ public abstract class Piece {
         return colors;
     }
 
+    /**
+     * Simulate a move on a single piece.
+     * @param move The type of move, except rotations (this has an overloaded method).
+     * @param isPrime If the move is prime or not.
+     * @param isDouble If the move is double or not.
+     */
     public void move(Rotation move, boolean isPrime, boolean isDouble) {
         // This works by temporarily rotating pieces
         switch (move) {
@@ -159,20 +165,20 @@ public abstract class Piece {
 
     /**
      * Rotate a single piece.
-     * @param type X/Y/Z
+     * @param move X/Y/Z
      * @param isPrime If the move is prime or not.
      * @param isDouble If the move is double or not.
      */
-    public void move(Rotation.CubeRotation type, boolean isPrime, boolean isDouble) {
+    public void move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
         if (isDouble) {
-            move(type, isPrime, false);
+            move(move, isPrime, false);
         }
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
 
         // Reset the piece's colours
         this.colors = new HashMap<>(defaultColors);
-        switch (type) {
+        switch (move) {
             case X -> {
                 // Move the colours to simulate a cube rotation
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));

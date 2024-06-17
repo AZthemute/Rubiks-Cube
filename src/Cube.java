@@ -140,6 +140,7 @@ public class Cube {
         public void moveR(boolean isPrime) {
             // Hashmap of temp pieces to avoid a lot of declarations
             HashMap<String, Piece> tempPieces = new HashMap<>();
+            // todo: double Z rotation if prime (could be on entire cube)
             if (this.xCoordinate == Rotation.MIDDLE) {
                 // todo: move the pieces properly (they just need different instantiation)
                 tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
@@ -270,18 +271,27 @@ public class Cube {
      * @return The cube.
      */
     public Cube moveR(boolean isPrime) {
+        if (isPrime) {
+            move(Rotation.CubeRotation.Z, true, true);
+        }
         for (xLayer layer: layers.values()) {
             layer.moveR(isPrime);
         }
         return this;
     }
 
-    public Cube move(Rotation type, boolean isPrime, boolean isDouble) {
+    /**
+     * Simulate a move on a single piece.
+     * @param move The type of move, except rotations (this has an overloaded method).
+     * @param isPrime If the move is prime or not.
+     * @param isDouble If the move is double or not.
+     */
+    public Cube move(Rotation move, boolean isPrime, boolean isDouble) {
         // todo
         if (isDouble) {
-            move(type, isPrime, false);
+            move(move, isPrime, false);
         }
-        switch (type) {
+        switch (move) {
             case BACK -> {
             }
             case RIGHT -> moveR(isPrime);
@@ -290,6 +300,16 @@ public class Cube {
             case LEFT -> {
             }
             case UP -> {
+                if (!isPrime) {
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                    moveR(false);
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                }
+                else {
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                    moveR(true);
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                }
             }
             case DOWN -> {
             }
@@ -298,6 +318,51 @@ public class Cube {
             case EQUATOR -> {
             }
             case STANDING -> {
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Rotate the entire cube.
+     * @param move X/Y/Z
+     * @param isPrime If the move is prime or not.
+     * @param isDouble If the move is double or not.
+     */
+    public Cube move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
+        if (isDouble) {
+            move(move, isPrime, false);
+        }
+        // todo
+        switch (move) {
+            case X -> {
+            }
+            case Y -> {
+            }
+            case Z -> {
+                // todo first (not prime)
+                // Move around the pieces
+                // F/S/B move
+                // UxL -> UxR
+                // ExL -> UxM
+                // DxL -> UxL
+
+                // UxM -> ExR
+                // ExM unmoved
+                // DxM -> ExL
+
+                // UxR -> DxR
+                // ExR -> DxM
+                // DxR -> DxL
+
+                // I think constructing new xLayers with the moved pieces is the only way...
+                // anyway, do something like
+                // get up yLayer of LEFT, move to up of RIGHT
+                // get up yLayer of MIDDLE, move to equator of RIGHT
+                // get up yLayer of RIGHT, move to down of RIGHT
+                // then construct new xLayer with the method yet to be implemented that just takes a HashMap<Rotation, yLayer>.
+
+                // Rotate method the pieces
             }
         }
         return this;
