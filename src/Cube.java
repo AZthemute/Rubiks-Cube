@@ -301,9 +301,7 @@ public class Cube {
         if (isPrime) {
             move(Rotation.CubeRotation.Z, true, true);
         }
-        for (xLayer layer: layers.values()) {
-            layer.moveR(isPrime);
-        }
+        layers.get(Rotation.RIGHT).moveR(isPrime);
         return this;
     }
 
@@ -339,6 +337,16 @@ public class Cube {
                 }
             }
             case DOWN -> {
+                if (!isPrime) {
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                    moveR(false);
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                }
+                else {
+                    move(Rotation.CubeRotation.Z, false, isDouble);
+                    moveR(true);
+                    move(Rotation.CubeRotation.Z, true, isDouble);
+                }
             }
             case MIDDLE -> {
             }
@@ -366,8 +374,15 @@ public class Cube {
         xLayer cubeRightLayer = layers.get(Rotation.RIGHT);
         switch (move) {
             case X -> {
+                for (xLayer layer: layers.values()) {
+                    layer.moveR(isPrime);
+                }
             }
             case Y -> {
+                // Do a U', E, D move if not prime
+                move(Rotation.UP, !isPrime, isDouble);
+                move(Rotation.EQUATOR, isPrime, isDouble);
+                move(Rotation.DOWN, isPrime, isDouble);
             }
             case Z -> {
                 if (!isPrime) {
