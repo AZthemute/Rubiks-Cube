@@ -263,7 +263,7 @@ public class Cube {
      * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
      * @param y Up/Equator/Down: Which layer on the y co-ordinate the piece is on
      * @param z Front/Standing/Back: Which layer on the z co-ordinate the piece is on
-     * @return The piece
+     * @return The piece.
      */
     public Piece getPiece(Rotation x, Rotation y, Rotation z) {
         Piece piece;
@@ -315,6 +315,10 @@ public class Cube {
         // todo
         if (isDouble) {
             move(move, isPrime, false);
+        }
+        if (isPrime) {
+            move(move, false, false);
+            move(move, false, false);
         }
         switch (move) {
             case BACK -> {
@@ -368,6 +372,10 @@ public class Cube {
         if (isDouble) {
             move(move, isPrime, false);
         }
+        if (isPrime) {
+            move(move, false, false);
+            move(move, false, false);
+        }
         HashMap<Rotation, xLayer> newLayers = new HashMap<>();
         xLayer cubeLeftLayer = layers.get(Rotation.LEFT);
         xLayer cubeMiddleLayer = layers.get(Rotation.MIDDLE);
@@ -385,52 +393,27 @@ public class Cube {
                 move(Rotation.DOWN, isPrime, isDouble);
             }
             case Z -> {
-                if (!isPrime) {
-                    newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeLeftLayer.get(Rotation.DOWN)); // DL -> UL
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> EL
-                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.DOWN)); // DR -> DL
-                        }
-                    }));
-                    newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> UM
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
-                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> DM
-                        }
-                    }));
-                    newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeLeftLayer.get(Rotation.UP)); // UL -> UR
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> ER
-                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.UP)); // UR -> DR
-                        }
-                    }));
-                }
-                else {
-                    newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeRightLayer.get(Rotation.UP)); // UR -> UL
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> EL
-                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.UP)); // UL -> DL
-                        }
-                    }));
-                    newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> UM
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
-                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> DM
-                        }
-                    }));
-                    newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
-                        {
-                            put(Rotation.UP, cubeRightLayer.get(Rotation.DOWN)); // DR -> UR
-                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> ER
-                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.DOWN)); // DL -> DR
-                        }
-                    }));
-                }
+                newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
+                    {
+                        put(Rotation.UP, cubeLeftLayer.get(Rotation.DOWN)); // DL -> UL
+                        put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> EL
+                        put(Rotation.DOWN, cubeRightLayer.get(Rotation.DOWN)); // DR -> DL
+                    }
+                }));
+                newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
+                    {
+                        put(Rotation.UP, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> UM
+                        put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
+                        put(Rotation.DOWN, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> DM
+                    }
+                }));
+                newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
+                    {
+                        put(Rotation.UP, cubeLeftLayer.get(Rotation.UP)); // UL -> UR
+                        put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> ER
+                        put(Rotation.DOWN, cubeRightLayer.get(Rotation.UP)); // UR -> DR
+                    }
+                }));
             }
         }
         // Rotate method the pieces
