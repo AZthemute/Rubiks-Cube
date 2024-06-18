@@ -24,6 +24,11 @@ public class Cube {
         HashMap<Rotation, yLayer> layers;
         Rotation xCoordinate;
 
+        /**
+         * Automatic constructor that fills in the pieces based
+         * on the white front, green up position.
+         * @param xCoordinate
+         */
         public xLayer(Rotation xCoordinate) {
             this.xCoordinate = xCoordinate;
 
@@ -120,6 +125,14 @@ public class Cube {
         }
 
         /**
+         * Up, Equator, Down
+         * @param layers
+         */
+        public xLayer(HashMap<Rotation, yLayer> layers) {
+            this.layers = layers;
+        }
+
+        /**
          * Get a single yLayer of this xLayer.
          * @param layer Up/Equator/Down
          * @return The yLayer.
@@ -180,6 +193,12 @@ public class Cube {
                 layer.moveR(isPrime);
             }
         }
+
+        public void move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
+            for (yLayer layer: layers.values()) {
+                layer.move(move, isPrime, isDouble);
+            }
+        }
     }
 
     private class yLayer {
@@ -222,6 +241,14 @@ public class Cube {
             for (Piece piece: pieces.values()) {
                 if (piece != null) {
                     piece.moveR(isPrime);
+                }
+            }
+        }
+
+        public void move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
+            for (Piece piece: pieces.values()) {
+                if (piece != null) {
+                    piece.move(move, isPrime, isDouble);
                 }
             }
         }
@@ -333,38 +360,69 @@ public class Cube {
         if (isDouble) {
             move(move, isPrime, false);
         }
-        // todo
+        HashMap<Rotation, xLayer> newLayers = new HashMap<>();
+        xLayer cubeLeftLayer = layers.get(Rotation.LEFT);
+        xLayer cubeMiddleLayer = layers.get(Rotation.MIDDLE);
+        xLayer cubeRightLayer = layers.get(Rotation.RIGHT);
         switch (move) {
             case X -> {
             }
             case Y -> {
             }
             case Z -> {
-                // todo first (not prime)
-                // Move around the pieces
-                // F/S/B move
-                // UxL -> UxR
-                // ExL -> UxM
-                // DxL -> UxL
-
-                // UxM -> ExR
-                // ExM unmoved
-                // DxM -> ExL
-
-                // UxR -> DxR
-                // ExR -> DxM
-                // DxR -> DxL
-
-                // I think constructing new xLayers with the moved pieces is the only way...
-                // anyway, do something like
-                // get up yLayer of LEFT, move to up of RIGHT
-                // get up yLayer of MIDDLE, move to equator of RIGHT
-                // get up yLayer of RIGHT, move to down of RIGHT
-                // then construct new xLayer with the method yet to be implemented that just takes a HashMap<Rotation, yLayer>.
-
-                // Rotate method the pieces
+                if (!isPrime) {
+                    newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeLeftLayer.get(Rotation.DOWN)); // DL -> UL
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> EL
+                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.DOWN)); // DR -> DL
+                        }
+                    }));
+                    newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> UM
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
+                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> DM
+                        }
+                    }));
+                    newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeLeftLayer.get(Rotation.UP)); // UL -> UR
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> ER
+                            put(Rotation.DOWN, cubeRightLayer.get(Rotation.UP)); // UR -> DR
+                        }
+                    }));
+                }
+                else {
+                    newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeRightLayer.get(Rotation.UP)); // UR -> UL
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> EL
+                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.UP)); // UL -> DL
+                        }
+                    }));
+                    newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> UM
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
+                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> DM
+                        }
+                    }));
+                    newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
+                        {
+                            put(Rotation.UP, cubeRightLayer.get(Rotation.DOWN)); // DR -> UR
+                            put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> ER
+                            put(Rotation.DOWN, cubeLeftLayer.get(Rotation.DOWN)); // DL -> DR
+                        }
+                    }));
+                }
             }
         }
+        // Rotate method the pieces
+        for (xLayer layer: newLayers.values()) {
+            layer.move(move, isPrime, isDouble);
+        }
+        this.layers = newLayers;
         return this;
     }
 
