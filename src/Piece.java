@@ -173,6 +173,10 @@ public abstract class Piece {
         if (isDouble) {
             move(move, isPrime, false);
         }
+        else if (isPrime) {
+            move(move, false, false);
+            move(move, false, false);
+        }
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
 
@@ -213,16 +217,16 @@ public abstract class Piece {
                 // Move the colours to simulate a cube rotation
                 colors.put(Rotation.FRONT, oldColors.get(Rotation.FRONT));
                 colors.put(Rotation.BACK, oldColors.get(Rotation.BACK));
-                if (!isPrime) {
+                // If on up
+                if (oldColors.get(Rotation.UP) != null) {
                     colors.put(Rotation.RIGHT, oldColors.get(Rotation.UP));
                     colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
                     colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
                 }
-                else {
-                    // Temporarily move the colours to simulate a cube rotation
-                    colors.put(Rotation.LEFT, oldColors.get(Rotation.UP));
-                    colors.put(Rotation.RIGHT, oldColors.get(Rotation.DOWN));
-                    colors.put(Rotation.UP, oldColors.get(Rotation.RIGHT));
+                else if (oldColors.get(Rotation.DOWN) != null) {
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
+                    colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
+                    colors.put(Rotation.LEFT, oldColors.get(Rotation.DOWN));
                 }
             }
         }

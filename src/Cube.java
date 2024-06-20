@@ -1,3 +1,4 @@
+import java.time.chrono.MinguoDate;
 import java.util.HashMap;
 
 public class Cube {
@@ -128,7 +129,8 @@ public class Cube {
          * Up, Equator, Down
          * @param layers
          */
-        public xLayer(HashMap<Rotation, yLayer> layers) {
+        public xLayer(Rotation xCoordinate, HashMap<Rotation, yLayer> layers) {
+            this.xCoordinate = xCoordinate;
             this.layers = layers;
         }
 
@@ -321,42 +323,31 @@ public class Cube {
             move(move, false, false);
         }
         switch (move) {
+            case FRONT, STANDING -> {
+                move(Rotation.CubeRotation.Y, !isPrime, false);
+                moveR(isPrime);
+                move(Rotation.CubeRotation.Y, isPrime, false);
+            }
             case BACK -> {
+                move(Rotation.CubeRotation.Y, isPrime, false);
+                moveR(isPrime);
+                move(Rotation.CubeRotation.Y, !isPrime, false);
+            }
+            case LEFT, MIDDLE -> {
+                move(Rotation.CubeRotation.Z, false, true);
+                layers.get(move).moveR(isPrime);
+                move(Rotation.CubeRotation.Z, false, true);
             }
             case RIGHT -> moveR(isPrime);
-            case FRONT -> {
-            }
-            case LEFT -> {
-            }
             case UP -> {
-                if (!isPrime) {
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                    moveR(false);
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                }
-                else {
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                    moveR(true);
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                }
+                move(Rotation.CubeRotation.Z, isPrime, false);
+                moveR(false);
+                move(Rotation.CubeRotation.Z, !isPrime, false);
             }
-            case DOWN -> {
-                if (!isPrime) {
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                    moveR(false);
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                }
-                else {
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                    moveR(true);
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                }
-            }
-            case MIDDLE -> {
-            }
-            case EQUATOR -> {
-            }
-            case STANDING -> {
+            case EQUATOR, DOWN -> {
+                move(Rotation.CubeRotation.Z, !isPrime, false);
+                moveR(false);
+                move(Rotation.CubeRotation.Z, isPrime, false);
             }
         }
         return this;
@@ -393,21 +384,21 @@ public class Cube {
                 move(Rotation.DOWN, isPrime, isDouble);
             }
             case Z -> {
-                newLayers.put(Rotation.LEFT, new xLayer(new HashMap<>() {
+                newLayers.put(Rotation.LEFT, new xLayer(Rotation.LEFT, new HashMap<>() {
                     {
                         put(Rotation.UP, cubeLeftLayer.get(Rotation.DOWN)); // DL -> UL
                         put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.DOWN)); // DM -> EL
                         put(Rotation.DOWN, cubeRightLayer.get(Rotation.DOWN)); // DR -> DL
                     }
                 }));
-                newLayers.put(Rotation.MIDDLE, new xLayer(new HashMap<>() {
+                newLayers.put(Rotation.MIDDLE, new xLayer(Rotation.MIDDLE, new HashMap<>() {
                     {
                         put(Rotation.UP, cubeLeftLayer.get(Rotation.EQUATOR)); // EL -> UM
                         put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.EQUATOR)); // EM -> EM
                         put(Rotation.DOWN, cubeRightLayer.get(Rotation.EQUATOR)); // ER -> DM
                     }
                 }));
-                newLayers.put(Rotation.RIGHT, new xLayer(new HashMap<>() {
+                newLayers.put(Rotation.RIGHT, new xLayer(Rotation.RIGHT, new HashMap<>() {
                     {
                         put(Rotation.UP, cubeLeftLayer.get(Rotation.UP)); // UL -> UR
                         put(Rotation.EQUATOR, cubeMiddleLayer.get(Rotation.UP)); // UM -> ER
