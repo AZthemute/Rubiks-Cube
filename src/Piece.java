@@ -35,7 +35,7 @@ public abstract class Piece {
      */
     public HashMap<Rotation, Color> moveR(boolean isPrime) {
         if (isPrime) {
-            move(Rotation.CubeRotation.Z, true, true);
+            move(Rotation.CubeRotation.Z, false, true);
         }
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
@@ -115,9 +115,6 @@ public abstract class Piece {
                 colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
-        }
-        if (isPrime) {
-            move(Rotation.CubeRotation.Z, true, true);
         }
         return colors;
     }
@@ -217,16 +214,18 @@ public abstract class Piece {
                 // Move the colours to simulate a cube rotation
                 colors.put(Rotation.FRONT, oldColors.get(Rotation.FRONT));
                 colors.put(Rotation.BACK, oldColors.get(Rotation.BACK));
+                colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
+                colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
                 // If on up
                 if (oldColors.get(Rotation.UP) != null) {
                     colors.put(Rotation.RIGHT, oldColors.get(Rotation.UP));
-                    colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
-                    colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
                 }
+                // If on down
                 else if (oldColors.get(Rotation.DOWN) != null) {
-                    colors.put(Rotation.DOWN, oldColors.get(Rotation.RIGHT));
-                    colors.put(Rotation.UP, oldColors.get(Rotation.LEFT));
                     colors.put(Rotation.LEFT, oldColors.get(Rotation.DOWN));
+                }
+                // If on middle (not corner)
+                else {
                 }
             }
         }

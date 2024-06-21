@@ -339,9 +339,9 @@ public class Cube {
             }
             case RIGHT -> moveR(isPrime);
             case UP -> {
-                move(Rotation.CubeRotation.Z, isPrime, false);
+                move(Rotation.CubeRotation.Z, false, false);
                 moveR(false);
-                move(Rotation.CubeRotation.Z, !isPrime, false);
+                move(Rotation.CubeRotation.Z, true, false);
             }
             case EQUATOR, DOWN -> {
                 move(Rotation.CubeRotation.Z, !isPrime, false);
