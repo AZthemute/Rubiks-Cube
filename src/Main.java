@@ -7,7 +7,7 @@ public class Main {
         cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.STANDING).display();
         cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.BACK).display();
         // todo: fix Z'
-        cube.move(Rotation.CubeRotation.Z, true, false);
+        cube.move(Rotation.UP, true, false);
         cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.FRONT).display();
         cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.STANDING).display();
         cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.BACK).display();

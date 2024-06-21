@@ -308,15 +308,14 @@ public class Cube {
     }
 
     /**
-     * Simulate a move on a single piece.
+     * Simulate a move on the whole cube.
      * @param move The type of move, except rotations (this has an overloaded method).
      * @param isPrime If the move is prime or not.
      * @param isDouble If the move is double or not.
      */
     public Cube move(Rotation move, boolean isPrime, boolean isDouble) {
-        // todo
         if (isDouble) {
-            move(move, isPrime, false);
+            move(move, false, false);
         }
         if (isPrime) {
             move(move, false, false);
@@ -409,7 +408,7 @@ public class Cube {
         }
         // Rotate method the pieces
         for (xLayer layer: newLayers.values()) {
-            layer.move(move, isPrime, isDouble);
+            layer.move(move, false, false);
         }
         this.layers = newLayers;
         return this;
