@@ -322,19 +322,29 @@ public class Cube {
             move(move, false, false);
         }
         switch (move) {
-            case FRONT, STANDING -> {
-                move(Rotation.CubeRotation.Y, !isPrime, false);
+            case FRONT -> {
+                move(Rotation.CubeRotation.Y, true, false);
                 moveR(isPrime);
-                move(Rotation.CubeRotation.Y, isPrime, false);
+                move(Rotation.CubeRotation.Y, false, false);
+            }
+            case STANDING -> {
+                move(Rotation.CubeRotation.Y, true, false);
+                layers.get(Rotation.MIDDLE).moveR(isPrime); // The rotations move standing to middle
+                move(Rotation.CubeRotation.Y, false, false);
             }
             case BACK -> {
-                move(Rotation.CubeRotation.Y, isPrime, false);
+                move(Rotation.CubeRotation.Y, false, false);
                 moveR(isPrime);
-                move(Rotation.CubeRotation.Y, !isPrime, false);
+                move(Rotation.CubeRotation.Y, true, false);
             }
-            case LEFT, MIDDLE -> {
+            case LEFT -> {
                 move(Rotation.CubeRotation.Z, false, true);
-                layers.get(move).moveR(isPrime);
+                moveR(isPrime);
+                move(Rotation.CubeRotation.Z, false, true);
+            }
+            case MIDDLE -> {
+                move(Rotation.CubeRotation.Z, false, true);
+                layers.get(Rotation.MIDDLE).moveR(isPrime);
                 move(Rotation.CubeRotation.Z, false, true);
             }
             case RIGHT -> moveR(isPrime);
@@ -343,10 +353,15 @@ public class Cube {
                 moveR(false);
                 move(Rotation.CubeRotation.Z, true, false);
             }
-            case EQUATOR, DOWN -> {
-                move(Rotation.CubeRotation.Z, !isPrime, false);
+            case EQUATOR -> {
+                move(Rotation.CubeRotation.Z, true, false);
+                layers.get(Rotation.MIDDLE).moveR(isPrime); // The rotations move equator to middle
+                move(Rotation.CubeRotation.Z, false, false);
+            }
+            case DOWN -> {
+                move(Rotation.CubeRotation.Z, true, false);
                 moveR(false);
-                move(Rotation.CubeRotation.Z, isPrime, false);
+                move(Rotation.CubeRotation.Z, false, false);
             }
         }
         return this;

@@ -1,4 +1,3 @@
-import javax.swing.event.ListDataEvent;
 import java.util.HashMap;
 
 public abstract class Piece {
@@ -19,12 +18,22 @@ public abstract class Piece {
 
     public Piece(HashMap<Rotation, Color> colors) {
         this.colors = colors;
-        colors.putIfAbsent(Rotation.BACK, null);
-        colors.putIfAbsent(Rotation.RIGHT, null);
-        colors.putIfAbsent(Rotation.FRONT, null);
-        colors.putIfAbsent(Rotation.LEFT, null);
-        colors.putIfAbsent(Rotation.UP, null);
-        colors.putIfAbsent(Rotation.DOWN, null);
+        this.colors.putIfAbsent(Rotation.BACK, null);
+        this.colors.putIfAbsent(Rotation.RIGHT, null);
+        this.colors.putIfAbsent(Rotation.FRONT, null);
+        this.colors.putIfAbsent(Rotation.LEFT, null);
+        this.colors.putIfAbsent(Rotation.UP, null);
+        this.colors.putIfAbsent(Rotation.DOWN, null);
+    }
+
+    public Piece(Color[] colors) {
+        this.colors = buildPieceColors(colors);
+        this.colors.putIfAbsent(Rotation.BACK, null);
+        this.colors.putIfAbsent(Rotation.RIGHT, null);
+        this.colors.putIfAbsent(Rotation.FRONT, null);
+        this.colors.putIfAbsent(Rotation.LEFT, null);
+        this.colors.putIfAbsent(Rotation.UP, null);
+        this.colors.putIfAbsent(Rotation.DOWN, null);
     }
 
     /**
