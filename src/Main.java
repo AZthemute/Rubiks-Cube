@@ -11,8 +11,8 @@ public class Main {
     }
 
     private static void displayStuff(Cube cube) {
-        cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.FRONT).display();
-        cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.STANDING).display();
-        cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.BACK).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.FRONT).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.STANDING).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.BACK).display();
     }
 }

@@ -329,22 +329,22 @@ public class Cube {
             }
             case STANDING -> {
                 move(Rotation.CubeRotation.Y, true, false);
-                layers.get(Rotation.MIDDLE).moveR(isPrime); // The rotations move standing to middle
+                layers.get(Rotation.MIDDLE).moveR(false); // The rotations move standing to middle
                 move(Rotation.CubeRotation.Y, false, false);
             }
             case BACK -> {
                 move(Rotation.CubeRotation.Y, false, false);
-                moveR(isPrime);
+                moveR(false);
                 move(Rotation.CubeRotation.Y, true, false);
             }
             case LEFT -> {
                 move(Rotation.CubeRotation.Z, false, true);
-                moveR(isPrime);
+                moveR(false);
                 move(Rotation.CubeRotation.Z, false, true);
             }
             case MIDDLE -> {
                 move(Rotation.CubeRotation.Z, false, true);
-                layers.get(Rotation.MIDDLE).moveR(isPrime);
+                layers.get(Rotation.MIDDLE).moveR(false);
                 move(Rotation.CubeRotation.Z, false, true);
             }
             case RIGHT -> moveR(isPrime);
@@ -355,7 +355,7 @@ public class Cube {
             }
             case EQUATOR -> {
                 move(Rotation.CubeRotation.Z, true, false);
-                layers.get(Rotation.MIDDLE).moveR(isPrime); // The rotations move equator to middle
+                layers.get(Rotation.MIDDLE).moveR(false); // The rotations move equator to middle
                 move(Rotation.CubeRotation.Z, false, false);
             }
             case DOWN -> {

@@ -58,20 +58,41 @@ public abstract class Piece {
          white, green, red piece, while the cube is facing with green front and white
          top, as reference.
 
-         The following if else chains check which colours are on the piece and
-         then moves them accordingly.
+         The following if else chains check which colours are on the piece and then
+         moves them accordingly.
 
          To aid understanding, comments will explain what pieces were used as a reference.
          Keep in mind these are all assuming green front and white top.
+
+         The comments for where the pieces are is where they are BEFORE moving anything around.
         */
         switch (getPieceType()) {
             case EDGE -> {
                 // Top layer
                 if (oldColors.get(Rotation.UP) != null) {
+                    // UBM
+                    if (oldColors.get(Rotation.BACK) != null) {
+                        colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                    }
+                    // UFM
+                    else if (oldColors.get(Rotation.FRONT) != null) {
+                        colors.put(Rotation.FRONT, oldColors.get(Rotation.UP));
+                    }
+                    // Not M
                     colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
+                    // may need more M cases for DFM and whatnot.
                 }
                 // Bottom layer
                 else if (oldColors.get(Rotation.DOWN) != null) {
+                    // DBM
+                    if (oldColors.get(Rotation.BACK) != null) {
+                        colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                    }
+                    // DFM
+                    else if (oldColors.get(Rotation.FRONT) != null) {
+                        colors.put(Rotation.DOWN, oldColors.get(Rotation.FRONT));
+                    }
+                    // Not M
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
                 // Middle front layer
@@ -79,7 +100,7 @@ public abstract class Piece {
                     colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                 }
                 // Middle back layer
-                else {
+                else if (oldColors.get(Rotation.BACK) != null) {
                     colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                 }
 
@@ -120,7 +141,22 @@ public abstract class Piece {
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CENTER -> {
-                // Simply don't move the piece.
+                if (oldColors.get(Rotation.BACK) != null) {
+                    colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                }
+                else if (oldColors.get(Rotation.UP) != null) {
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.UP));
+                    System.out.println("This message should not appear1");
+                }
+                else if (oldColors.get(Rotation.FRONT) != null) {
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.FRONT));
+                    System.out.println("This message should not appear2");
+                }
+                else if (oldColors.get(Rotation.DOWN) != null) {
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.DOWN));
+                    System.out.println("This message should not appear3");
+                }
+
                 colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
