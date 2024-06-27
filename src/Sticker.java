@@ -3,16 +3,21 @@ import java.awt.*;
 
 public class Sticker extends JPanel {
 
+    static final int width = 50;
+    static final int height = 50;
     int x;
+    int y;
     java.awt.Color color;
 
-    public Sticker(int x, java.awt.Color color) {
+    public Sticker(int x, int y, java.awt.Color color) {
         this.x = x;
+        this.y = y;
         this.color = color;
     }
 
-    public Sticker(int x, Color color) {
+    public Sticker(int x, int y, Color color) {
         this.x = x;
+        this.y = y;
         switch (color) {
             case WHITE -> this.color = java.awt.Color.WHITE;
             case GREEN -> this.color = java.awt.Color.GREEN;
@@ -28,11 +33,8 @@ public class Sticker extends JPanel {
         Graphics2D g = (Graphics2D) graphics;
         g.setColor(java.awt.Color.blue);
         // Set the position and size of the rectangle
-        int y = 50;
-        int width = 50;
-        int height = 50;
 
-        // Draw the filled blue rectangle
+        // Draw the filled square
         g.setColor(color);
         g.fillRect(x, y, width, height);
 

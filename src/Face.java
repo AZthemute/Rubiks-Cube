@@ -10,10 +10,16 @@ public class Face extends JPanel {
 
     public Face(Color[][] colors) {
         this.stickers = new Sticker[3][3];
-        for (Color[] topLevelColors: colors) {
-            for (Color color: topLevelColors) {
-                if (color == null) continue;
-                stickers[2][2] = new Sticker(50, color); // placeholder x. we'll change the position on the screen based on its position in the array. do something like x+i*width
+        for (int i = 0; i <= 2; i++) {
+            Color[] topLevelColors = colors[i];
+            for (int j = 0; j <= 2; j++) {
+                Color color = topLevelColors[j];
+                if (color == null) {
+                    System.out.println(i);
+                    System.out.println(j);
+                    continue;
+                };
+                stickers[i][j] = new Sticker(i*50, j*50, color);
             }
         }
     }

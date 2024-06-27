@@ -347,7 +347,7 @@ public class Cube {
                 layers.get(Rotation.MIDDLE).moveR(false);
                 move(Rotation.CubeRotation.Z, false, true);
             }
-            case RIGHT -> moveR(isPrime);
+            case RIGHT -> moveR(false);
             case UP -> {
                 move(Rotation.CubeRotation.Z, false, false);
                 moveR(false);
