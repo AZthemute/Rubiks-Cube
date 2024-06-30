@@ -1,111 +1,167 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;
 
-    private JButton butShowGraph;
+    private JButton buttonShowCube;
+
+    private static final int faceXOffset = 160;
+    private static final int faceYOffset = 160;
+    private static final int faceXBase = 300;
+    private static final int faceYBase = 210;
+    private static final int faceWidth = 160;
+    private static final int faceHeight = 160;
 
     public GUI(Cube cube) {
         setTitle("Demo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(0,0,600, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(null);
         setVisible(true);
 
-        butShowGraph = new JButton("Show Graph");
-        butShowGraph.setBounds(50,50,120,40);
-        butShowGraph.addActionListener(this);
-        add(butShowGraph);
+        buttonShowCube = new JButton("Show Cube");
+        buttonShowCube.setBounds(50,50,120,40);
+        buttonShowCube.addActionListener(this);
+        add(buttonShowCube);
 
         this.cube = cube;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Show Graph")) {
-            System.out.println("click");
+        if (e.getActionCommand().equals("Show Cube")) {
+            HashMap<String, Piece> upLayer = cube.getYLayer(Rotation.UP);
+            HashMap<String, Piece> equatorLayer = cube.getYLayer(Rotation.EQUATOR);
+            HashMap<String, Piece> downLayer = cube.getYLayer(Rotation.DOWN);
 
-            // todo: find cleaner way to do
+            Color[][] upFaceStickers = {
+                    {
+                            upLayer.get("UBL").getColors().get(Rotation.UP),
+                            upLayer.get("USL").getColors().get(Rotation.UP),
+                            upLayer.get("UFL").getColors().get(Rotation.UP),
+                    },
+                    {
+                            upLayer.get("UBM").getColors().get(Rotation.UP),
+                            upLayer.get("USM").getColors().get(Rotation.UP),
+                            upLayer.get("UFM").getColors().get(Rotation.UP),
+                    },
+                    {
+                            upLayer.get("UBR").getColors().get(Rotation.UP),
+                            upLayer.get("USR").getColors().get(Rotation.UP),
+                            upLayer.get("UFR").getColors().get(Rotation.UP),
+                    }
+            };
 
-            Piece UBL = this.cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.BACK);
-            Piece UBM = this.cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.BACK);
-            Piece UBR = this.cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.BACK);
-            Piece USL = this.cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.STANDING);
-            Piece USM = this.cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.STANDING);
-            Piece USR = this.cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.STANDING);
-            Piece UFL = this.cube.getPiece(Rotation.LEFT, Rotation.UP, Rotation.FRONT);
-            Piece UFM = this.cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.FRONT);
-            Piece UFR = this.cube.getPiece(Rotation.RIGHT, Rotation.UP, Rotation.FRONT);
+            Color[][] frontFaceStickers = {
+                    {
+                            upLayer.get("UFL").getColors().get(Rotation.FRONT),
+                            equatorLayer.get("EFL").getColors().get(Rotation.FRONT),
+                            downLayer.get("DFL").getColors().get(Rotation.FRONT),
+                    },
+                    {
+                            upLayer.get("UFM").getColors().get(Rotation.FRONT),
+                            equatorLayer.get("EFM").getColors().get(Rotation.FRONT),
+                            downLayer.get("DFM").getColors().get(Rotation.FRONT),
+                    },
+                    {
+                            upLayer.get("UFR").getColors().get(Rotation.FRONT),
+                            equatorLayer.get("EFR").getColors().get(Rotation.FRONT),
+                            downLayer.get("DFR").getColors().get(Rotation.FRONT),
+                    }
+            };
 
-            Piece EFL = this.cube.getPiece(Rotation.LEFT, Rotation.EQUATOR, Rotation.FRONT);
-            Piece EFM = this.cube.getPiece(Rotation.MIDDLE, Rotation.EQUATOR, Rotation.FRONT);
-            Piece EFR = this.cube.getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.FRONT);
+            // This needs to be rotated some weird way, I don't really understand it.
+            Color[][] leftFaceStickers = {
+                    {
+                            upLayer.get("UBL").getColors().get(Rotation.LEFT),
+                            equatorLayer.get("EBL").getColors().get(Rotation.LEFT),
+                            downLayer.get("DBL").getColors().get(Rotation.LEFT),
+                    },
+                    {
+                            upLayer.get("USL").getColors().get(Rotation.LEFT),
+                            equatorLayer.get("ESL").getColors().get(Rotation.LEFT),
+                            downLayer.get("DSL").getColors().get(Rotation.LEFT),
+                    },
+                    {
+                            upLayer.get("UFL").getColors().get(Rotation.LEFT),
+                            equatorLayer.get("EFL").getColors().get(Rotation.LEFT),
+                            downLayer.get("DFL").getColors().get(Rotation.LEFT),
+                    }
+            };
 
-            Piece ESL = this.cube.getPiece(Rotation.LEFT, Rotation.EQUATOR, Rotation.STANDING);
+            // This needs to be rotated some weird way, I don't really understand it.
+            Color[][] rightFaceStickers = {
+                    {
+                            upLayer.get("UFR").getColors().get(Rotation.RIGHT),
+                            equatorLayer.get("EFR").getColors().get(Rotation.RIGHT),
+                            downLayer.get("DFR").getColors().get(Rotation.RIGHT),
+                    },
+                    {
+                            upLayer.get("USR").getColors().get(Rotation.RIGHT),
+                            equatorLayer.get("ESR").getColors().get(Rotation.RIGHT),
+                            downLayer.get("DSR").getColors().get(Rotation.RIGHT),
+                    },
+                    {
+                            upLayer.get("UBR").getColors().get(Rotation.RIGHT),
+                            equatorLayer.get("EBR").getColors().get(Rotation.RIGHT),
+                            downLayer.get("DBR").getColors().get(Rotation.RIGHT),
+                    }
+            };
 
-            Piece EBL = this.cube.getPiece(Rotation.LEFT, Rotation.EQUATOR, Rotation.BACK);
+            // For this one, we must mirror the layer.
+            Color[][] backFaceStickers = {
+                    {
+                            upLayer.get("UBR").getColors().get(Rotation.BACK),
+                            equatorLayer.get("EBR").getColors().get(Rotation.BACK),
+                            downLayer.get("DBR").getColors().get(Rotation.BACK),
+                    },
+                    {
+                            upLayer.get("UBM").getColors().get(Rotation.BACK),
+                            equatorLayer.get("EBM").getColors().get(Rotation.BACK),
+                            downLayer.get("DBM").getColors().get(Rotation.BACK),
+                    },
+                    {
+                            upLayer.get("UBL").getColors().get(Rotation.BACK),
+                            equatorLayer.get("EBL").getColors().get(Rotation.BACK),
+                            downLayer.get("DBL").getColors().get(Rotation.BACK),
+                    }
+            };
 
-            Piece DFL = this.cube.getPiece(Rotation.LEFT, Rotation.DOWN, Rotation.FRONT);
-            Piece DFM = this.cube.getPiece(Rotation.MIDDLE, Rotation.DOWN, Rotation.FRONT);
-            Piece DFR = this.cube.getPiece(Rotation.RIGHT, Rotation.DOWN, Rotation.FRONT);
-
-            Piece DSL = this.cube.getPiece(Rotation.LEFT, Rotation.DOWN, Rotation.STANDING);
-
-            Piece DBL = this.cube.getPiece(Rotation.LEFT, Rotation.DOWN, Rotation.BACK);
-
-            Color[][] upFaceStickers = new Color[3][3];
-            upFaceStickers[0][0] = UBL.getColors().get(Rotation.UP);
-            upFaceStickers[1][0] = UBM.getColors().get(Rotation.UP);
-            upFaceStickers[2][0] = UBR.getColors().get(Rotation.UP);
-            upFaceStickers[0][1] = USL.getColors().get(Rotation.UP);
-            upFaceStickers[1][1] = USM.getColors().get(Rotation.UP);
-            upFaceStickers[2][1] = USR.getColors().get(Rotation.UP);
-            upFaceStickers[0][2] = UFL.getColors().get(Rotation.UP);
-            upFaceStickers[1][2] = UFM.getColors().get(Rotation.UP);
-            upFaceStickers[2][2] = UFR.getColors().get(Rotation.UP);
-
-            Color[][] frontFaceStickers = new Color[3][3];
-            frontFaceStickers[0][0] = UFL.getColors().get(Rotation.FRONT);
-            frontFaceStickers[1][0] = UFM.getColors().get(Rotation.FRONT);
-            frontFaceStickers[2][0] = UFR.getColors().get(Rotation.FRONT);
-            frontFaceStickers[0][1] = EFL.getColors().get(Rotation.FRONT);
-            frontFaceStickers[1][1] = EFM.getColors().get(Rotation.FRONT);
-            frontFaceStickers[2][1] = EFR.getColors().get(Rotation.FRONT);
-            frontFaceStickers[0][2] = DFL.getColors().get(Rotation.FRONT);
-            frontFaceStickers[1][2] = DFM.getColors().get(Rotation.FRONT);
-            frontFaceStickers[2][2] = DFR.getColors().get(Rotation.FRONT);
-
-            Color[][] leftFaceStickers = new Color[3][3];
-            leftFaceStickers[0][0] = USL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[1][0] = ESL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[2][0] = DSL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[0][1] = UBL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[1][1] = EBL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[2][1] = DBL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[0][2] = UFL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[1][2] = EFL.getColors().get(Rotation.LEFT);
-            leftFaceStickers[2][2] = DFL.getColors().get(Rotation.LEFT);
-
-            Color[][] rightFaceStickers = new Color[3][3];
-
-            Color[][] backFaceStickers = new Color[3][3];
-
-            Color[][] downFaceStickers = new Color[3][3];
+            // I don't know about this either. it gets mirrored or something.
+            Color[][] downFaceStickers = {
+                    {
+                            downLayer.get("DFL").getColors().get(Rotation.DOWN),
+                            downLayer.get("DSL").getColors().get(Rotation.DOWN),
+                            downLayer.get("DBL").getColors().get(Rotation.DOWN),
+                    },
+                    {
+                            downLayer.get("DFM").getColors().get(Rotation.DOWN),
+                            downLayer.get("DSM").getColors().get(Rotation.DOWN),
+                            downLayer.get("DBM").getColors().get(Rotation.DOWN),
+                    },
+                    {
+                            downLayer.get("DFR").getColors().get(Rotation.DOWN),
+                            downLayer.get("DSR").getColors().get(Rotation.DOWN),
+                            downLayer.get("DBR").getColors().get(Rotation.DOWN),
+                    }
+            };
 
             Face upFace = new Face(upFaceStickers);
-            upFace.setBounds(500, 50, 151, 151);
+            upFace.setBounds(faceXBase, faceYBase - faceYOffset, faceWidth, faceHeight);
             Face frontFace = new Face(frontFaceStickers);
-            frontFace.setBounds(500, 210, 151, 151);
+            frontFace.setBounds(faceXBase, faceYBase, faceWidth, faceHeight);
             Face leftFace = new Face(leftFaceStickers);
-            leftFace.setBounds(340, 210, 151, 151);
+            leftFace.setBounds(faceXBase - faceXOffset, faceYBase, faceWidth, faceHeight);
             Face rightFace = new Face(rightFaceStickers);
-            rightFace.setBounds(340, 210, 151, 151);
+            rightFace.setBounds(faceXBase + faceXOffset, faceYBase, faceWidth, faceHeight);
             Face backFace = new Face(backFaceStickers);
-            backFace.setBounds(340, 210, 151, 151);
+            backFace.setBounds(faceXBase + (faceXOffset * 2), faceYBase, faceWidth, faceHeight);
             Face downFace = new Face(downFaceStickers);
-            downFace.setBounds(340, 210, 151, 151);
+            downFace.setBounds(faceXBase, faceYBase + faceYOffset, faceWidth, faceHeight);
 
             add(upFace);
             add(frontFace);

@@ -159,7 +159,9 @@ public class Cube {
             if (this.xCoordinate == Rotation.MIDDLE) {
                 // todo: move the pieces properly (they just need different instantiation)
                 tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
+                getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT).display();
                 tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
+                getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK).display();
                 tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
                 tempPieces.put("DFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
 
@@ -169,6 +171,7 @@ public class Cube {
                 tempPieces.put("EFx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
             }
             else {
+                System.out.println("This is NOT a middle layer.");
                 tempPieces.put("UFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
                 tempPieces.put("UBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
                 tempPieces.put("DBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
@@ -296,6 +299,41 @@ public class Cube {
     }
 
     /**
+     * Used for the GUI. Gets a hashmap representing a yLayer.
+     * @param layer Up/Equator/Down
+     * @return The yLayer
+     */
+    public HashMap<String, Piece> getYLayer(Rotation layer) {
+        String layerNotation = switch(layer) {
+            case UP -> "U";
+            case EQUATOR -> "E";
+            case DOWN -> "D";
+            default -> throw new IllegalArgumentException("layer must be one of: UP, EQUATOR, DOWN");
+        };
+
+        // To counteract ESM
+        Piece XSM = null;
+        if (layer != Rotation.EQUATOR) {
+            XSM = getPiece(Rotation.MIDDLE, layer, Rotation.STANDING);
+        }
+        Piece finalXSM = XSM;
+
+        return new HashMap<>() {
+            {
+                put(layerNotation + "FL", getPiece(Rotation.LEFT, layer, Rotation.FRONT));
+                put(layerNotation + "SL", getPiece(Rotation.LEFT, layer, Rotation.STANDING));
+                put(layerNotation + "BL", getPiece(Rotation.LEFT, layer, Rotation.BACK));
+                put(layerNotation + "FM", getPiece(Rotation.MIDDLE, layer, Rotation.FRONT));
+                put(layerNotation + "SM", finalXSM);
+                put(layerNotation + "BM", getPiece(Rotation.MIDDLE, layer, Rotation.BACK));
+                put(layerNotation + "FR", getPiece(Rotation.RIGHT, layer, Rotation.FRONT));
+                put(layerNotation + "SR", getPiece(Rotation.RIGHT, layer, Rotation.STANDING));
+                put(layerNotation + "BR", getPiece(Rotation.RIGHT, layer, Rotation.BACK));
+            }
+        };
+    }
+
+    /**
      * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
@@ -324,7 +362,7 @@ public class Cube {
         switch (move) {
             case FRONT -> {
                 move(Rotation.CubeRotation.Y, true, false);
-                moveR(isPrime);
+                moveR(false);
                 move(Rotation.CubeRotation.Y, false, false);
             }
             case STANDING -> {

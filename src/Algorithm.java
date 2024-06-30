@@ -56,6 +56,11 @@ public class Algorithm {
     public Cube execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed
         for (Move move : moves) {
+            /*
+            System.out.println(move.type);
+            System.out.println(move.isPrime);
+            System.out.println(move.isDouble);
+             */
             cube.move(move.type, move.isPrime, move.isDouble);
         }
         return cube;
