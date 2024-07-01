@@ -37,12 +37,13 @@ public abstract class Piece {
     }
 
     /**
-     * Method to simulate an R move on a piece.
+     * Method to simulate an move in the R direction on a piece.
      * <p>
      * This method only moves around the colours, since the position
      * of the piece on the cube is tracked by the Cube object.
      */
     public HashMap<Rotation, Color> moveR(boolean isPrime) {
+        this.display();
         if (isPrime) {
             move(Rotation.CubeRotation.Z, false, true);
         }
@@ -72,27 +73,36 @@ public abstract class Piece {
                 if (oldColors.get(Rotation.UP) != null) {
                     // UBM
                     if (oldColors.get(Rotation.BACK) != null) {
-                        colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                        System.out.println("UB layer");
+                        colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
+                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                     }
                     // UFM
                     else if (oldColors.get(Rotation.FRONT) != null) {
-                        colors.put(Rotation.FRONT, oldColors.get(Rotation.UP));
+                        System.out.println("UF layer");
+                        colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
+                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                     }
-                    // Not M
-                    colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
-                    // may need more M cases for DFM and whatnot.
+                    // Not M (I think)
+                    else {
+                        colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
+                    }
                 }
                 // Bottom layer
                 else if (oldColors.get(Rotation.DOWN) != null) {
                     // DBM
                     if (oldColors.get(Rotation.BACK) != null) {
-                        colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                        System.out.println("DB layer");
+                        colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
+                        colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                     }
                     // DFM
                     else if (oldColors.get(Rotation.FRONT) != null) {
-                        colors.put(Rotation.DOWN, oldColors.get(Rotation.FRONT));
+                        System.out.println("DF layer");
+                        colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
+                        colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                     }
-                    // Not M
+                    // Applies to all
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
                 // Middle front layer
@@ -108,6 +118,7 @@ public abstract class Piece {
                 // for one of these, it will simply be null.
                 colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
+                this.display();
             }
             case CORNER -> {
                 // Top layer
@@ -141,20 +152,17 @@ public abstract class Piece {
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CENTER -> {
-                if (oldColors.get(Rotation.BACK) != null) {
-                    colors.put(Rotation.UP, oldColors.get(Rotation.BACK));
+                if (oldColors.get(Rotation.FRONT) != null) {
+                    colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                 }
                 else if (oldColors.get(Rotation.UP) != null) {
-                    colors.put(Rotation.FRONT, oldColors.get(Rotation.UP));
-                    System.out.println("This message should not appear1");
+                    colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                 }
-                else if (oldColors.get(Rotation.FRONT) != null) {
-                    colors.put(Rotation.DOWN, oldColors.get(Rotation.FRONT));
-                    System.out.println("This message should not appear2");
+                else if (oldColors.get(Rotation.BACK) != null) {
+                    colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                 }
                 else if (oldColors.get(Rotation.DOWN) != null) {
-                    colors.put(Rotation.BACK, oldColors.get(Rotation.DOWN));
-                    System.out.println("This message should not appear3");
+                    colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
 
                 colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));

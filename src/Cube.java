@@ -159,9 +159,7 @@ public class Cube {
             if (this.xCoordinate == Rotation.MIDDLE) {
                 // todo: move the pieces properly (they just need different instantiation)
                 tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
-                getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT).display();
                 tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
-                getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK).display();
                 tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
                 tempPieces.put("DFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
 
@@ -194,6 +192,8 @@ public class Cube {
             layers.get(Rotation.DOWN).pieces.put(Rotation.STANDING, tempPieces.get("EBx")); // EBx -> DSx
             layers.get(Rotation.EQUATOR).pieces.put(Rotation.FRONT, tempPieces.get("DSx")); // DSx -> EFx
             layers.get(Rotation.UP).pieces.put(Rotation.STANDING, tempPieces.get("EFx")); // EFx -> USx
+
+            // Rotate method the pieces
             for (yLayer layer: layers.values()) {
                 layer.moveR(isPrime);
             }

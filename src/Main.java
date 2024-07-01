@@ -10,12 +10,15 @@ public class Main {
         new GUI(cube);
 
         cube.move(Rotation.MIDDLE, false, false);
+        cube.move(Rotation.MIDDLE, false, false);
+        cube.move(Rotation.MIDDLE, false, false);
+        cube.move(Rotation.MIDDLE, false, false);
         //displayStuff(cube);
     }
 
     private static void displayStuff(Cube cube) {
-        cube.getPiece(Rotation.LEFT, Rotation.EQUATOR, Rotation.STANDING).display();
-        cube.getPiece(Rotation.RIGHT, Rotation.EQUATOR, Rotation.FRONT).display();
-        cube.getPiece(Rotation.MIDDLE, Rotation.EQUATOR, Rotation.BACK).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.FRONT).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.UP, Rotation.BACK).display();
+        cube.getPiece(Rotation.MIDDLE, Rotation.DOWN, Rotation.FRONT).display();
     }
 }
