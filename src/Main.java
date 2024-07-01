@@ -7,7 +7,7 @@ public class Main {
 
         Algorithm alg = new Algorithm("R");
 
-        alg.execute(cube);
+        // alg.execute(cube);
 
         new GUI(cube);
         //displayStuff(cube);

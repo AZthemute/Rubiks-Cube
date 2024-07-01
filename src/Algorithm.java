@@ -67,7 +67,7 @@ public class Algorithm {
     }
 
     /**
-     * Helper class for one move.
+     * Helper record for one move.
      */
     private record Move(Rotation type, boolean isPrime, boolean isDouble) {}
 }

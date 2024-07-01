@@ -354,7 +354,7 @@ public class Cube {
         if (isDouble) {
             move(move, false, false);
         }
-        if (isPrime) {
+        else if (isPrime) {
             move(move, false, false);
             move(move, false, false);
         }
@@ -412,13 +412,12 @@ public class Cube {
      */
     public Cube move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
         if (isDouble) {
-            move(move, isPrime, false);
+            move(move, false, false);
         }
-        if (isPrime) {
+        else if (isPrime) {
             move(move, false, false);
             move(move, false, false);
         }
-        HashMap<Rotation, xLayer> newLayers = new HashMap<>();
         xLayer cubeLeftLayer = layers.get(Rotation.LEFT);
         xLayer cubeMiddleLayer = layers.get(Rotation.MIDDLE);
         xLayer cubeRightLayer = layers.get(Rotation.RIGHT);
@@ -429,12 +428,12 @@ public class Cube {
                 }
             }
             case Y -> {
-                // Do a U', E, D move if not prime
-                move(Rotation.UP, !isPrime, isDouble);
-                move(Rotation.EQUATOR, isPrime, isDouble);
-                move(Rotation.DOWN, isPrime, isDouble);
+                move(Rotation.UP, false, isDouble);
+                move(Rotation.EQUATOR, true, isDouble);
+                move(Rotation.DOWN, true, isDouble);
             }
             case Z -> {
+                HashMap<Rotation, xLayer> newLayers = new HashMap<>();
                 newLayers.put(Rotation.LEFT, new xLayer(Rotation.LEFT, new HashMap<>() {
                     {
                         put(Rotation.UP, cubeLeftLayer.get(Rotation.DOWN)); // DL -> UL
@@ -456,13 +455,13 @@ public class Cube {
                         put(Rotation.DOWN, cubeRightLayer.get(Rotation.UP)); // UR -> DR
                     }
                 }));
+                this.layers = newLayers;
+                // Rotate method the pieces
+                for (xLayer layer: newLayers.values()) {
+                    layer.move(move, false, false);
+                }
             }
         }
-        // Rotate method the pieces
-        for (xLayer layer: newLayers.values()) {
-            layer.move(move, false, false);
-        }
-        this.layers = newLayers;
         return this;
     }
 
