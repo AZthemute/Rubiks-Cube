@@ -169,7 +169,6 @@ public class Cube {
                 tempPieces.put("EFx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
             }
             else {
-                System.out.println("This is NOT a middle layer.");
                 tempPieces.put("UFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
                 tempPieces.put("UBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
                 tempPieces.put("DBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));

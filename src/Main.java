@@ -5,14 +5,11 @@ public class Main {
         //cube.move(Rotation.MIDDLE, false, false);
         //displayStuff(cube);
 
-        Algorithm alg = new Algorithm("F");
+        Algorithm alg = new Algorithm("R");
+
+        alg.execute(cube);
 
         new GUI(cube);
-
-        cube.move(Rotation.MIDDLE, false, false);
-        cube.move(Rotation.MIDDLE, false, false);
-        cube.move(Rotation.MIDDLE, false, false);
-        cube.move(Rotation.MIDDLE, false, false);
         //displayStuff(cube);
     }
 

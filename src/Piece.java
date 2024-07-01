@@ -43,7 +43,6 @@ public abstract class Piece {
      * of the piece on the cube is tracked by the Cube object.
      */
     public HashMap<Rotation, Color> moveR(boolean isPrime) {
-        this.display();
         if (isPrime) {
             move(Rotation.CubeRotation.Z, false, true);
         }
@@ -118,7 +117,6 @@ public abstract class Piece {
                 // for one of these, it will simply be null.
                 colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
-                this.display();
             }
             case CORNER -> {
                 // Top layer

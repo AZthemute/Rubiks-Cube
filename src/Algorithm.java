@@ -16,7 +16,7 @@ public class Algorithm {
         String[] splitAlgorithm = alg.split(" ");
         for (String move: splitAlgorithm) {
             if (move.length() > 2) {
-                throw new IllegalArgumentException("Move " + move + " is invalid.");
+                throw new IllegalArgumentException("Move type \"" + move + "\" is invalid.");
             }
             Rotation moveType;
             boolean isPrime = false;
@@ -32,7 +32,7 @@ public class Algorithm {
                 case 'L' -> moveType = Rotation.LEFT;
                 case 'M' -> moveType = Rotation.MIDDLE;
                 case 'R' -> moveType = Rotation.RIGHT;
-                default -> throw new IllegalArgumentException("Move type " + move.charAt(0) + " is invalid.");
+                default -> throw new IllegalArgumentException("Move type \"" + move.charAt(0) + "\" is invalid.");
             }
 
             // Check modifiers, if any
@@ -66,9 +66,8 @@ public class Algorithm {
         return cube;
     }
 
-        /**
-         * Helper class for one move.
-         */
-        private record Move(Rotation type, boolean isPrime, boolean isDouble) {
-    }
+    /**
+     * Helper class for one move.
+     */
+    private record Move(Rotation type, boolean isPrime, boolean isDouble) {}
 }
