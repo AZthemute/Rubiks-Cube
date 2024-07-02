@@ -265,10 +265,7 @@ public class Cube {
     /**
      * Get a single piece. All parameters are move notation. Refer to singular pieces by
      * using the layers that the piece is on, for example UFR refers to the top right
-     * piece on the front. The parameters of this function act the same way, although
-     * importantly this uses an XYZ system, so UFR would actually be RUF. This may be
-     * changed in the future.
-     *
+     * piece on the front. The parameters of this function act the same way.
      * @param y Up/Equator/Down: Which layer on the y co-ordinate the piece is on
      * @param z Front/Standing/Back: Which layer on the z co-ordinate the piece is on
      * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
@@ -282,12 +279,9 @@ public class Cube {
             case LEFT, RIGHT -> xLayer = layers.get(x);
             case MIDDLE -> {
                 // Check if the core is being chosen
-                if ((y == Rotation.EQUATOR) && (z == Rotation.STANDING)) {
-                    throw new IllegalArgumentException("tried to get the core at MIDDLE, EQUATOR, STANDING, which is not a piece.");
-                }
-                else {
-                    xLayer = layers.get(x);
-                }
+                if ((y == Rotation.EQUATOR) && (z == Rotation.STANDING)) throw new IllegalArgumentException(
+                        "tried to get the core at EQUATOR, STANDING, MIDDLE, which is not a piece.");
+                else xLayer = layers.get(x);
             }
             default -> throw new IllegalArgumentException("Invalid X co-ordinate: " + x);
         }
@@ -303,49 +297,11 @@ public class Cube {
     }
 
     /**
-     * Used for the GUI. Gets a hashmap representing a yLayer.
-     * @param layer Up/Equator/Down
-     * @return The yLayer
-     */
-    public HashMap<String, Piece> getYLayer(Rotation layer) {
-        String layerNotation = switch(layer) {
-            case UP -> "U";
-            case EQUATOR -> "E";
-            case DOWN -> "D";
-            default -> throw new IllegalArgumentException("layer must be one of: UP, EQUATOR, DOWN");
-        };
-
-        // To counteract ESM
-        Piece XSM = null;
-        if (layer != Rotation.EQUATOR) {
-            XSM = getPiece(layer, Rotation.STANDING, Rotation.MIDDLE);
-        }
-        Piece finalXSM = XSM;
-
-        return new HashMap<>() {
-            {
-                put(layerNotation + "FL", getPiece(layer, Rotation.FRONT, Rotation.LEFT));
-                put(layerNotation + "SL", getPiece(layer, Rotation.STANDING, Rotation.LEFT));
-                put(layerNotation + "BL", getPiece(layer, Rotation.BACK, Rotation.LEFT));
-                put(layerNotation + "FM", getPiece(layer, Rotation.FRONT, Rotation.MIDDLE));
-                put(layerNotation + "SM", finalXSM);
-                put(layerNotation + "BM", getPiece(layer, Rotation.BACK, Rotation.MIDDLE));
-                put(layerNotation + "FR", getPiece(layer, Rotation.FRONT, Rotation.RIGHT));
-                put(layerNotation + "SR", getPiece(layer, Rotation.STANDING, Rotation.RIGHT));
-                put(layerNotation + "BR", getPiece(layer, Rotation.BACK, Rotation.RIGHT));
-            }
-        };
-    }
-
-    /**
      * Simulates one R move. This is a helper method for the move() method.
      * @return The cube.
      */
-    public Cube moveR(boolean isPrime) {
-        if (isPrime) {
-            move(Rotation.CubeRotation.Z, true, true);
-        }
-        layers.get(Rotation.RIGHT).moveR(isPrime);
+    public Cube moveR() {
+        layers.get(Rotation.RIGHT).moveR(false);
         return this;
     }
 
@@ -366,7 +322,7 @@ public class Cube {
         switch (move) {
             case FRONT -> {
                 move(Rotation.CubeRotation.Y, true, false);
-                moveR(false);
+                moveR();
                 move(Rotation.CubeRotation.Y, false, false);
             }
             case STANDING -> {
@@ -376,12 +332,12 @@ public class Cube {
             }
             case BACK -> {
                 move(Rotation.CubeRotation.Y, false, false);
-                moveR(false);
+                moveR();
                 move(Rotation.CubeRotation.Y, true, false);
             }
             case LEFT -> {
                 move(Rotation.CubeRotation.Z, false, true);
-                moveR(false);
+                moveR();
                 move(Rotation.CubeRotation.Z, false, true);
             }
             case MIDDLE -> {
@@ -389,10 +345,10 @@ public class Cube {
                 layers.get(Rotation.MIDDLE).moveR(false);
                 move(Rotation.CubeRotation.Z, false, true);
             }
-            case RIGHT -> moveR(false);
+            case RIGHT -> moveR();
             case UP -> {
                 move(Rotation.CubeRotation.Z, false, false);
-                moveR(false);
+                moveR();
                 move(Rotation.CubeRotation.Z, true, false);
             }
             case EQUATOR -> {
@@ -402,7 +358,7 @@ public class Cube {
             }
             case DOWN -> {
                 move(Rotation.CubeRotation.Z, true, false);
-                moveR(false);
+                moveR();
                 move(Rotation.CubeRotation.Z, false, false);
             }
         }
@@ -429,7 +385,7 @@ public class Cube {
         switch (move) {
             case X -> {
                 for (xLayer layer: layers.values()) {
-                    layer.moveR(isPrime);
+                    layer.moveR(false);
                 }
             }
             case Y -> {

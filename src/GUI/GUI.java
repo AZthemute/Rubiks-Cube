@@ -14,6 +14,14 @@ import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;
+    /**
+     * The first set of moves provided.
+     */
+    private Algorithm alg;
+    /**
+     * All moves provided after the first set
+     */
+    private Algorithm moves;
 
     // GUI components
     private JButton buttonShowCube;
@@ -22,6 +30,7 @@ public class GUI extends JFrame implements ActionListener {
     private JComboBox<String> solveChoicesBox;
     private JButton solveButton;
     private JButton exportButton;
+    private JButton resetButton;
     private final String[] solveChoices = {"Cross", "Winter Variation", "COLL"};
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
@@ -68,6 +77,11 @@ public class GUI extends JFrame implements ActionListener {
         exportButton.setBounds(20, 650, 310, 40);
         exportButton.addActionListener(this);
         add(exportButton);
+
+        resetButton = new JButton("Reset cube to solved state");
+        resetButton.setBounds(340, 650, 200, 40);
+        resetButton.addActionListener(this);
+        add(resetButton);
 
         // Drawing the cube
         this.cube = cube;
@@ -130,18 +144,27 @@ public class GUI extends JFrame implements ActionListener {
             case "Export solution to CubeDB" -> {
                 Runtime rt = Runtime.getRuntime();
                 try {
-                    rt.exec("rundll32 url.dll,FileProtocolHandler " + "https://cubedb.net");
+                    rt.exec("rundll32 url.dll,FileProtocolHandler " + "https://cubedb.net?puzzle=3x3&scramble=" + alg.toCubeDB());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
+                }
+            }
+            case "Reset cube to solved state" -> {
+                int toReset = JOptionPane.showConfirmDialog (this,
+                        "Are you sure you want to reset the cube to being solved?",
+                        "Confirm" ,JOptionPane.YES_NO_OPTION);
+                if (toReset == JOptionPane.YES_OPTION){
+                    this.cube = new Cube();
+                    drawCube();
                 }
             }
         }
     }
 
     public void drawCube() {
-        HashMap<String, Piece> upLayer = cube.getYLayer(Rotation.UP);
-        HashMap<String, Piece> equatorLayer = cube.getYLayer(Rotation.EQUATOR);
-        HashMap<String, Piece> downLayer = cube.getYLayer(Rotation.DOWN);
+        HashMap<String, Piece> upLayer = getYLayer(Rotation.UP);
+        HashMap<String, Piece> equatorLayer = getYLayer(Rotation.EQUATOR);
+        HashMap<String, Piece> downLayer = getYLayer(Rotation.DOWN);
 
         Color[][] upFaceStickers = {
                 {
@@ -269,5 +292,40 @@ public class GUI extends JFrame implements ActionListener {
         add(backFace);
         add(downFace);
         repaint();
+    }
+
+    /**
+     * Used for the GUI. Gets a hashmap representing a yLayer.
+     * @param layer Up/Equator/Down
+     * @return The yLayer
+     */
+    public HashMap<String, Piece> getYLayer(Rotation layer) {
+        String layerNotation = switch(layer) {
+            case UP -> "U";
+            case EQUATOR -> "E";
+            case DOWN -> "D";
+            default -> throw new IllegalArgumentException("layer must be one of: UP, EQUATOR, DOWN");
+        };
+
+        // To counteract ESM
+        Piece XSM = null;
+        if (layer != Rotation.EQUATOR) {
+            XSM = cube.getPiece(layer, Rotation.STANDING, Rotation.MIDDLE);
+        }
+        Piece finalXSM = XSM;
+
+        return new HashMap<>() {
+            {
+                put(layerNotation + "FL", cube.getPiece(layer, Rotation.FRONT, Rotation.LEFT));
+                put(layerNotation + "SL", cube.getPiece(layer, Rotation.STANDING, Rotation.LEFT));
+                put(layerNotation + "BL", cube.getPiece(layer, Rotation.BACK, Rotation.LEFT));
+                put(layerNotation + "FM", cube.getPiece(layer, Rotation.FRONT, Rotation.MIDDLE));
+                put(layerNotation + "SM", finalXSM);
+                put(layerNotation + "BM", cube.getPiece(layer, Rotation.BACK, Rotation.MIDDLE));
+                put(layerNotation + "FR", cube.getPiece(layer, Rotation.FRONT, Rotation.RIGHT));
+                put(layerNotation + "SR", cube.getPiece(layer, Rotation.STANDING, Rotation.RIGHT));
+                put(layerNotation + "BR", cube.getPiece(layer, Rotation.BACK, Rotation.RIGHT));
+            }
+        };
     }
 }
