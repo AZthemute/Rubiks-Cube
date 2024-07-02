@@ -1,7 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.awt.Desktop;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;
@@ -9,7 +13,11 @@ public class GUI extends JFrame implements ActionListener {
     // GUI components
     private JButton buttonShowCube;
     private JTextField algInput;
-    private JOptionPane invalidInput;
+    private JLabel instructionText;
+    private JComboBox<String> solveChoicesBox;
+    private JButton solveButton;
+    private JButton exportButton;
+    private final String[] solveChoices = {"Cross", "Winter Variation", "COLL"};
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
@@ -23,20 +31,38 @@ public class GUI extends JFrame implements ActionListener {
     public GUI(Cube cube) {
         setTitle("Rubik's Cube");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(0,0,600, 400);
+        setBounds(0,0,1100, 650);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(null);
         setVisible(true);
 
         buttonShowCube = new JButton("Execute");
-        buttonShowCube.setBounds(800,20,120,40);
+        buttonShowCube.setBounds(850,20,120,40);
         buttonShowCube.addActionListener(this);
         add(buttonShowCube);
 
-        algInput = new JTextField("Enter moves...");
-        algInput.setBounds(50,20,720,40);
+        algInput = new JTextField("");
+        algInput.setBounds(120,20,720,40);
         algInput.addActionListener(this);
         add(algInput);
+
+        instructionText = new JLabel("Enter moves...");
+        instructionText.setBounds(20, 20, 100, 40);
+        add(instructionText);
+
+        solveChoicesBox = new JComboBox<>(solveChoices);
+        solveChoicesBox.setBounds(20, 600, 150, 40);
+        add(solveChoicesBox);
+
+        solveButton = new JButton("Solve");
+        solveButton.setBounds(180, 600, 150, 40);
+        solveButton.addActionListener(this);
+        add(solveButton);
+
+        exportButton = new JButton("Export solution to CubeDB");
+        exportButton.setBounds(20, 650, 310, 40);
+        exportButton.addActionListener(this);
+        add(exportButton);
 
         // Drawing the cube
         this.cube = cube;
@@ -57,21 +83,53 @@ public class GUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Execute")) {
-            Algorithm alg;
-            try {
-                alg = new Algorithm(algInput.getText());
+        switch (e.getActionCommand()) {
+            case "Execute" -> {
+                Algorithm alg;
+                try {
+                    alg = new Algorithm(algInput.getText());
+                }
+                catch (IllegalArgumentException except) {
+                    JOptionPane.showMessageDialog(this,
+                            "Error in moves: " + except.getMessage(),
+                            "Invalid moves", JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+                catch (StringIndexOutOfBoundsException except) {
+                    JOptionPane.showMessageDialog(this,
+                            "Please input some moves.",
+                            "Invalid moves", JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+                alg.execute(cube);
+                drawCube();
             }
-            catch (IllegalArgumentException except) {
-                except.printStackTrace();
-                JOptionPane.showMessageDialog(this,
-                        "Error in moves: " + except.getMessage(),
-                        "Invalid moves", JOptionPane.ERROR_MESSAGE
-                );
-                return;
+            case "Solve" -> {
+                switch (solveChoicesBox.getSelectedItem().toString()) {
+                    case "Cross" -> {
+                        System.out.println("Solving Cross");
+                    }
+                    case "Winter Variation" -> {
+                        System.out.println("Solving WV");
+                    }
+                    case "COLL" -> {
+                        System.out.println("Solving COLL");
+                    }
+                    default -> {
+                        throw new IllegalArgumentException("Solution type was invalid");
+                    }
+                }
             }
-            alg.execute(cube);
-            drawCube();
+            case "Export solution to CubeDB" -> {
+                Runtime rt = Runtime.getRuntime();
+                try {
+                    rt.exec("rundll32 url.dll,FileProtocolHandler " + "https://cubedb.net");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
 

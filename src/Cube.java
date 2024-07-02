@@ -1,4 +1,3 @@
-import java.time.chrono.MinguoDate;
 import java.util.HashMap;
 
 public class Cube {
@@ -158,26 +157,26 @@ public class Cube {
             // todo: double Z rotation if prime (could be on entire cube)
             if (this.xCoordinate == Rotation.MIDDLE) {
                 // todo: move the pieces properly (they just need different instantiation)
-                tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
-                tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
-                tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
-                tempPieces.put("DFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
+                tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(Rotation.UP, Rotation.FRONT, this.xCoordinate)));
+                tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(Rotation.UP, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(Rotation.DOWN, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DFx", new EdgePiece((EdgePiece) getPiece(Rotation.DOWN, Rotation.FRONT, this.xCoordinate)));
 
-                tempPieces.put("USx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.STANDING)));
-                tempPieces.put("EBx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.BACK)));
-                tempPieces.put("DSx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.STANDING)));
-                tempPieces.put("EFx", new CenterPiece((CenterPiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
+                tempPieces.put("USx", new CenterPiece((CenterPiece) getPiece(Rotation.UP, Rotation.STANDING, this.xCoordinate)));
+                tempPieces.put("EBx", new CenterPiece((CenterPiece) getPiece(Rotation.EQUATOR, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DSx", new CenterPiece((CenterPiece) getPiece(Rotation.DOWN, Rotation.STANDING, this.xCoordinate)));
+                tempPieces.put("EFx", new CenterPiece((CenterPiece) getPiece(Rotation.EQUATOR, Rotation.FRONT, this.xCoordinate)));
             }
             else {
-                tempPieces.put("UFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.FRONT)));
-                tempPieces.put("UBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.BACK)));
-                tempPieces.put("DBx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.BACK)));
-                tempPieces.put("DFx", new CornerPiece((CornerPiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.FRONT)));
+                tempPieces.put("UFx", new CornerPiece((CornerPiece) getPiece(Rotation.UP, Rotation.FRONT, this.xCoordinate)));
+                tempPieces.put("UBx", new CornerPiece((CornerPiece) getPiece(Rotation.UP, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DBx", new CornerPiece((CornerPiece) getPiece(Rotation.DOWN, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DFx", new CornerPiece((CornerPiece) getPiece(Rotation.DOWN, Rotation.FRONT, this.xCoordinate)));
 
-                tempPieces.put("USx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.UP, Rotation.STANDING)));
-                tempPieces.put("EBx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.BACK)));
-                tempPieces.put("DSx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.DOWN, Rotation.STANDING)));
-                tempPieces.put("EFx", new EdgePiece((EdgePiece) getPiece(this.xCoordinate, Rotation.EQUATOR, Rotation.FRONT)));
+                tempPieces.put("USx", new EdgePiece((EdgePiece) getPiece(Rotation.UP, Rotation.STANDING, this.xCoordinate)));
+                tempPieces.put("EBx", new EdgePiece((EdgePiece) getPiece(Rotation.EQUATOR, Rotation.BACK, this.xCoordinate)));
+                tempPieces.put("DSx", new EdgePiece((EdgePiece) getPiece(Rotation.DOWN, Rotation.STANDING, this.xCoordinate)));
+                tempPieces.put("EFx", new EdgePiece((EdgePiece) getPiece(Rotation.EQUATOR, Rotation.FRONT, this.xCoordinate)));
             }
 
             // Cycle pieces around
@@ -264,12 +263,13 @@ public class Cube {
      * piece on the front. The parameters of this function act the same way, although
      * importantly this uses an XYZ system, so UFR would actually be RUF. This may be
      * changed in the future.
-     * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
+     *
      * @param y Up/Equator/Down: Which layer on the y co-ordinate the piece is on
      * @param z Front/Standing/Back: Which layer on the z co-ordinate the piece is on
+     * @param x Left/Middle/Right: Which layer on the x co-ordinate the piece is on
      * @return The piece.
      */
-    public Piece getPiece(Rotation x, Rotation y, Rotation z) {
+    public Piece getPiece(Rotation y, Rotation z, Rotation x) {
         Piece piece;
         xLayer xLayer;
         yLayer yLayer;
@@ -313,21 +313,21 @@ public class Cube {
         // To counteract ESM
         Piece XSM = null;
         if (layer != Rotation.EQUATOR) {
-            XSM = getPiece(Rotation.MIDDLE, layer, Rotation.STANDING);
+            XSM = getPiece(layer, Rotation.STANDING, Rotation.MIDDLE);
         }
         Piece finalXSM = XSM;
 
         return new HashMap<>() {
             {
-                put(layerNotation + "FL", getPiece(Rotation.LEFT, layer, Rotation.FRONT));
-                put(layerNotation + "SL", getPiece(Rotation.LEFT, layer, Rotation.STANDING));
-                put(layerNotation + "BL", getPiece(Rotation.LEFT, layer, Rotation.BACK));
-                put(layerNotation + "FM", getPiece(Rotation.MIDDLE, layer, Rotation.FRONT));
+                put(layerNotation + "FL", getPiece(layer, Rotation.FRONT, Rotation.LEFT));
+                put(layerNotation + "SL", getPiece(layer, Rotation.STANDING, Rotation.LEFT));
+                put(layerNotation + "BL", getPiece(layer, Rotation.BACK, Rotation.LEFT));
+                put(layerNotation + "FM", getPiece(layer, Rotation.FRONT, Rotation.MIDDLE));
                 put(layerNotation + "SM", finalXSM);
-                put(layerNotation + "BM", getPiece(Rotation.MIDDLE, layer, Rotation.BACK));
-                put(layerNotation + "FR", getPiece(Rotation.RIGHT, layer, Rotation.FRONT));
-                put(layerNotation + "SR", getPiece(Rotation.RIGHT, layer, Rotation.STANDING));
-                put(layerNotation + "BR", getPiece(Rotation.RIGHT, layer, Rotation.BACK));
+                put(layerNotation + "BM", getPiece(layer, Rotation.BACK, Rotation.MIDDLE));
+                put(layerNotation + "FR", getPiece(layer, Rotation.FRONT, Rotation.RIGHT));
+                put(layerNotation + "SR", getPiece(layer, Rotation.STANDING, Rotation.RIGHT));
+                put(layerNotation + "BR", getPiece(layer, Rotation.BACK, Rotation.RIGHT));
             }
         };
     }
