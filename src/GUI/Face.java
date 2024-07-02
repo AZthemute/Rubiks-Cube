@@ -1,3 +1,7 @@
+package GUI;
+
+import types.Color;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,12 +12,12 @@ public class Face extends JPanel {
         this.stickers = stickers;
     }
 
-    public Face(Color[][] colors) {
+    public Face(types.Color[][] colors) {
         this.stickers = new Sticker[3][3];
         for (int i = 0; i <= 2; i++) {
-            Color[] topLevelColors = colors[i];
+            types.Color[] topLevelColors = colors[i];
             for (int j = 0; j <= 2; j++) {
-                Color color = topLevelColors[j];
+                types.Color color = topLevelColors[j];
                 if (color == null) {
                     System.out.println(i);
                     System.out.println(j);
@@ -42,10 +46,10 @@ public class Face extends JPanel {
         this.stickers = stickers;
     }
 
-    public void setStickers(Color[][] colors) {
+    public void setStickers(types.Color[][] colors) {
         this.stickers = new Sticker[3][3];
         for (int i = 0; i <= 2; i++) {
-            Color[] topLevelColors = colors[i];
+            types.Color[] topLevelColors = colors[i];
             for (int j = 0; j <= 2; j++) {
                 Color color = topLevelColors[j];
                 if (color == null) {

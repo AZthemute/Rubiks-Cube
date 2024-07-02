@@ -1,3 +1,5 @@
+package types;
+
 /**
  * Type of piece on the cube. This follows naming conventions
  * used within the cubing community.

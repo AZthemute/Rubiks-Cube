@@ -1,3 +1,9 @@
+package cube;
+
+import types.Color;
+import types.PieceType;
+import types.Rotation;
+
 import java.util.HashMap;
 
 public class EdgePiece extends Piece {

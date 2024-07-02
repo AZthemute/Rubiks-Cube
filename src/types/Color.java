@@ -1,3 +1,5 @@
+package types;
+
 /**
  * Valid colours of pieces/faces on the cube.
  */

@@ -1,11 +1,16 @@
+package GUI;
+
+import cube.Algorithm;
+import cube.Cube;
+import cube.Piece;
+import types.Color;
+import types.Rotation;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.awt.Desktop;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;

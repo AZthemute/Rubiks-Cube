@@ -1,3 +1,5 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,7 +17,7 @@ public class Sticker extends JPanel {
         this.color = color;
     }
 
-    public Sticker(int x, int y, Color color) {
+    public Sticker(int x, int y, types.Color color) {
         this.x = x;
         this.y = y;
         switch (color) {

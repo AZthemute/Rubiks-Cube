@@ -1,3 +1,7 @@
+import GUI.GUI;
+import cube.Cube;
+import types.Rotation;
+
 public class Main {
     public static void main(String[] args) {
         Cube cube = new Cube();

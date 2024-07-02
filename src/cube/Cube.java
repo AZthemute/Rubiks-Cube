@@ -1,3 +1,8 @@
+package cube;
+
+import types.Color;
+import types.Rotation;
+
 import java.util.HashMap;
 
 public class Cube {

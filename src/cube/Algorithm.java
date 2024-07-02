@@ -1,3 +1,7 @@
+package cube;
+
+import types.Rotation;
+
 import java.util.ArrayList;
 
 /**
