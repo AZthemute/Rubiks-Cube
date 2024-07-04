@@ -426,6 +426,29 @@ public class Cube {
         return this;
     }
 
+    public Algorithm solve(String type) {
+        Algorithm solveAlg = new Algorithm(""); // Defined with something to stop compiler errors for testing
+        switch (type) {
+            case "Cross" -> {
+                // I would implement the cstimer algorithm, but that's very complex.
+                Piece USB = getPiece(Rotation.UP, Rotation.STANDING, Rotation.BACK);
+                Color upColor = USB.getColors().get(Rotation.UP);
+                // Check for solved cross pieces
+            }
+            case "Winter Variation" -> {
+                System.out.println("Solving WV");
+                // Read list of algs from file
+            }
+            case "COLL" -> {
+                System.out.println("Solving COLL");
+            }
+            default -> {
+                throw new IllegalArgumentException("Solution type was invalid");
+            }
+        }
+        return solveAlg;
+    }
+
     public void display() {
         for (xLayer layer: layers.values()) {
             layer.display();

@@ -14,10 +14,12 @@ import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;
+
     /**
      * The first set of moves provided.
      */
     private Algorithm alg;
+
     /**
      * All moves provided after the first set
      */
@@ -31,7 +33,7 @@ public class GUI extends JFrame implements ActionListener {
     private JButton solveButton;
     private JButton exportButton;
     private JButton resetButton;
-    private final String[] solveChoices = {"Cross", "Winter Variation", "COLL"};
+    private JButton settingsButton;
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
@@ -64,6 +66,7 @@ public class GUI extends JFrame implements ActionListener {
         instructionText.setBounds(20, 20, 100, 40);
         add(instructionText);
 
+        String[] solveChoices = {"Cross", "Winter Variation", "COLL"};
         solveChoicesBox = new JComboBox<>(solveChoices);
         solveChoicesBox.setBounds(20, 600, 150, 40);
         add(solveChoicesBox);
@@ -82,6 +85,11 @@ public class GUI extends JFrame implements ActionListener {
         resetButton.setBounds(340, 650, 200, 40);
         resetButton.addActionListener(this);
         add(resetButton);
+
+        settingsButton = new JButton("Settings");
+        settingsButton.setBounds(340, 600, 200, 40);
+        settingsButton.addActionListener(this);
+        add(settingsButton);
 
         // Drawing the cube
         this.cube = cube;
@@ -126,20 +134,7 @@ public class GUI extends JFrame implements ActionListener {
                 drawCube();
             }
             case "Solve" -> {
-                switch (solveChoicesBox.getSelectedItem().toString()) {
-                    case "Cross" -> {
-                        System.out.println("Solving Cross");
-                    }
-                    case "Winter Variation" -> {
-                        System.out.println("Solving WV");
-                    }
-                    case "COLL" -> {
-                        System.out.println("Solving COLL");
-                    }
-                    default -> {
-                        throw new IllegalArgumentException("Solution type was invalid");
-                    }
-                }
+                Algorithm solveAlg = cube.solve(solveChoicesBox.getSelectedItem().toString());
             }
             case "Export solution to CubeDB" -> {
                 Runtime rt = Runtime.getRuntime();
@@ -157,6 +152,9 @@ public class GUI extends JFrame implements ActionListener {
                     this.cube = new Cube();
                     drawCube();
                 }
+            }
+            case "Settings" -> {
+                new SettingsMenu();
             }
         }
     }
