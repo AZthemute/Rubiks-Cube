@@ -20,6 +20,7 @@ public class Algorithm {
         String[] splitAlgorithm = alg.split(" ");
         for (String move: splitAlgorithm) {
             if (move.length() > 2) throw createIllegalMoveException(move);
+            if (move.length() == 0) continue; // In case of typos creating a double  space
 
             Rotation moveType;
             boolean isPrime = false;
@@ -50,6 +51,7 @@ public class Algorithm {
                     throw createIllegalMoveException(move);
                 }
             }
+            // todo: treat R2' as R2, R3 = R', etc
             moves.add(new Move(moveType, isPrime, isDouble));
         }
     }

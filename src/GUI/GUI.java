@@ -112,6 +112,14 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Execute" -> {
+                if (algInput.getText().equals("")) {
+                    JOptionPane.showMessageDialog(this,
+                            "Please input some moves. ",
+                            "Invalid moves", JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
                 Algorithm alg;
                 try {
                     alg = new Algorithm(algInput.getText());
@@ -125,7 +133,7 @@ public class GUI extends JFrame implements ActionListener {
                 }
                 catch (StringIndexOutOfBoundsException except) {
                     JOptionPane.showMessageDialog(this,
-                            "Please input some moves.",
+                            "Error in moves: " + except.getMessage(),
                             "Invalid moves", JOptionPane.ERROR_MESSAGE
                     );
                     return;
