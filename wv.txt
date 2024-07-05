@@ -1,0 +1,4 @@
+UFR,L' U2 R U R' U2 L
+NotUFR,U' R' F R U R U' R' F'
+SomethingElse,R U' R'
+Test,R U' R' U R' U' R U' R' U2 R

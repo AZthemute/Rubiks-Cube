@@ -124,14 +124,7 @@ public class GUI extends JFrame implements ActionListener {
                 try {
                     alg = new Algorithm(algInput.getText());
                 }
-                catch (IllegalArgumentException except) {
-                    JOptionPane.showMessageDialog(this,
-                            "Error in moves: " + except.getMessage(),
-                            "Invalid moves", JOptionPane.ERROR_MESSAGE
-                    );
-                    return;
-                }
-                catch (StringIndexOutOfBoundsException except) {
+                catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
                     JOptionPane.showMessageDialog(this,
                             "Error in moves: " + except.getMessage(),
                             "Invalid moves", JOptionPane.ERROR_MESSAGE
