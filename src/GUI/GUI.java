@@ -18,22 +18,20 @@ public class GUI extends JFrame implements ActionListener {
     /**
      * The first set of moves provided.
      */
-    private Algorithm alg;
+    private Algorithm scramble = null;
 
     /**
      * All moves provided after the first set
      */
-    private Algorithm moves;
+    private String movesString = "";
+    private Algorithm moves = null;
 
     // GUI components
-    private JButton buttonShowCube;
     private JTextField algInput;
     private JLabel instructionText;
     private JComboBox<String> solveChoicesBox;
-    private JButton solveButton;
-    private JButton exportButton;
-    private JButton resetButton;
-    private JButton settingsButton;
+    private JComboBox<String> exportChoicesBox;
+    private JButton solveButton, exportButton, resetButton, buttonShowCube;
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
@@ -71,25 +69,25 @@ public class GUI extends JFrame implements ActionListener {
         solveChoicesBox.setBounds(20, 600, 150, 40);
         add(solveChoicesBox);
 
+        String[] exportChoices = {"Export only the scramble", "Export all moves done", "Export only the solution"};
+        exportChoicesBox = new JComboBox<>(exportChoices);
+        exportChoicesBox.setBounds(20, 650, 310, 40);
+        add(exportChoicesBox);
+
         solveButton = new JButton("Solve");
         solveButton.setBounds(180, 600, 150, 40);
         solveButton.addActionListener(this);
         add(solveButton);
 
         exportButton = new JButton("Export solution to CubeDB");
-        exportButton.setBounds(20, 650, 310, 40);
+        exportButton.setBounds(340, 650, 200, 40);
         exportButton.addActionListener(this);
         add(exportButton);
 
         resetButton = new JButton("Reset cube to solved state");
-        resetButton.setBounds(340, 650, 200, 40);
+        resetButton.setBounds(340, 600, 200, 40);
         resetButton.addActionListener(this);
         add(resetButton);
-
-        settingsButton = new JButton("Settings");
-        settingsButton.setBounds(340, 600, 200, 40);
-        settingsButton.addActionListener(this);
-        add(settingsButton);
 
         // Drawing the cube
         this.cube = cube;
@@ -120,9 +118,20 @@ public class GUI extends JFrame implements ActionListener {
                     return;
                 }
 
-                Algorithm alg;
+                Algorithm thisMoves;
                 try {
-                    alg = new Algorithm(algInput.getText());
+                    // Update list of all moves done in this session
+                    movesString += algInput.getText() + " ";
+                    moves = new Algorithm(movesString);
+
+                    thisMoves = new Algorithm(algInput.getText());
+                    // Set the initial scramble if not done
+                    if (scramble == null) scramble = thisMoves;
+
+                    System.out.println(movesString);
+                    System.out.println(moves.toCubeDB());
+                    System.out.println(thisMoves.toCubeDB());
+                    System.out.println(scramble.toCubeDB());
                 }
                 catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
                     JOptionPane.showMessageDialog(this,
@@ -131,7 +140,7 @@ public class GUI extends JFrame implements ActionListener {
                     );
                     return;
                 }
-                alg.execute(cube);
+                thisMoves.execute(cube);
                 drawCube();
             }
             case "Solve" -> {
@@ -139,10 +148,25 @@ public class GUI extends JFrame implements ActionListener {
             }
             case "Export solution to CubeDB" -> {
                 Runtime rt = Runtime.getRuntime();
+                Algorithm alg;
+                switch (exportChoicesBox.getSelectedItem().toString()) {
+                    case "Export only the scramble" -> alg = scramble;
+                    case "Export all moves done" -> alg = moves;
+                    case "Export only the solution" -> alg = scramble; // todo
+                    default -> throw new IllegalArgumentException("Export choice was invalid");
+                }
                 try {
-                    rt.exec("rundll32 url.dll,FileProtocolHandler " + "https://cubedb.net?puzzle=3x3&scramble=" + alg.toCubeDB());
-                } catch (IOException ex) {
+                    rt.exec("rundll32 url.dll,FileProtocolHandler "
+                            + "https://cubedb.net?puzzle=3x3&scramble=" + alg.toCubeDB());
+                }
+                catch (IOException ex) {
                     throw new RuntimeException(ex);
+                }
+                catch (NullPointerException ex) {
+                    JOptionPane.showMessageDialog(this,
+                            "Please input some moves. ",
+                            "Invalid moves", JOptionPane.ERROR_MESSAGE
+                    );
                 }
             }
             case "Reset cube to solved state" -> {
@@ -151,11 +175,11 @@ public class GUI extends JFrame implements ActionListener {
                         "Confirm" ,JOptionPane.YES_NO_OPTION);
                 if (toReset == JOptionPane.YES_OPTION){
                     this.cube = new Cube();
+                    this.scramble = null;
+                    this.movesString = null;
+                    this.moves = null;
                     drawCube();
                 }
-            }
-            case "Settings" -> {
-                new SettingsMenu();
             }
         }
     }

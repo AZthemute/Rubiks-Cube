@@ -11,7 +11,7 @@ public class Main {
         new GUI(cube);
         ArrayList<String[]> algs = FileHandler.readIntoCSV("wv.txt");
         for (int i = 0; i < algs.size(); i++) {
-            System.out.println(Arrays.toString(algs.get(i)));
+            //System.out.println(Arrays.toString(algs.get(i)));
         }
     }
 
