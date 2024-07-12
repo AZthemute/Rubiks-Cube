@@ -29,9 +29,8 @@ public class GUI extends JFrame implements ActionListener {
     // GUI components
     private JTextField algInput;
     private JLabel instructionText;
-    private JComboBox<String> solveChoicesBox;
-    private JComboBox<String> exportChoicesBox;
-    private JButton solveButton, exportButton, resetButton, buttonShowCube;
+    private JComboBox<String> solveChoicesBox, exportChoicesBox;
+    private JButton solveButton, exportButton, resetButton, buttonShowCube, algsMenuButton;
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
@@ -79,7 +78,7 @@ public class GUI extends JFrame implements ActionListener {
         solveButton.addActionListener(this);
         add(solveButton);
 
-        exportButton = new JButton("Export solution to CubeDB");
+        exportButton = new JButton("Export to CubeDB");
         exportButton.setBounds(340, 650, 200, 40);
         exportButton.addActionListener(this);
         add(exportButton);
@@ -88,6 +87,11 @@ public class GUI extends JFrame implements ActionListener {
         resetButton.setBounds(340, 600, 200, 40);
         resetButton.addActionListener(this);
         add(resetButton);
+
+        algsMenuButton = new JButton("Algorithms");
+        algsMenuButton.setBounds(20, 550, 200, 40);
+        algsMenuButton.addActionListener(this);
+        add(algsMenuButton);
 
         // Drawing the cube
         this.cube = cube;
@@ -146,7 +150,7 @@ public class GUI extends JFrame implements ActionListener {
             case "Solve" -> {
                 Algorithm solveAlg = cube.solve(solveChoicesBox.getSelectedItem().toString());
             }
-            case "Export solution to CubeDB" -> {
+            case "Export to CubeDB" -> {
                 Runtime rt = Runtime.getRuntime();
                 Algorithm alg;
                 switch (exportChoicesBox.getSelectedItem().toString()) {
@@ -170,10 +174,10 @@ public class GUI extends JFrame implements ActionListener {
                 }
             }
             case "Reset cube to solved state" -> {
-                int toReset = JOptionPane.showConfirmDialog (this,
+                int toReset = JOptionPane.showConfirmDialog(this,
                         "Are you sure you want to reset the cube to being solved?",
-                        "Confirm" ,JOptionPane.YES_NO_OPTION);
-                if (toReset == JOptionPane.YES_OPTION){
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+                if (toReset == JOptionPane.YES_OPTION) {
                     this.cube = new Cube();
                     this.scramble = null;
                     this.movesString = null;
@@ -181,6 +185,7 @@ public class GUI extends JFrame implements ActionListener {
                     drawCube();
                 }
             }
+            case "Algorithms" -> new AlgsMenu();
         }
     }
 

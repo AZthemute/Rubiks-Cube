@@ -3,16 +3,11 @@ import cube.Cube;
 import types.Rotation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         Cube cube = new Cube();
         new GUI(cube);
-        ArrayList<String[]> algs = FileHandler.readIntoCSV("wv.txt");
-        for (int i = 0; i < algs.size(); i++) {
-            //System.out.println(Arrays.toString(algs.get(i)));
-        }
     }
 
     private static void displayStuff(Cube cube) {
