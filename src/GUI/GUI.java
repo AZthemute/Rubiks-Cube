@@ -119,15 +119,14 @@ public class GUI extends JFrame implements ActionListener {
                 }
 
                 Algorithm thisMoves;
+                String oldMovesString = movesString;
                 try {
-                    // Update list of all moves done in this session
-                    movesString += algInput.getText() + " ";
-                    moves = new Algorithm(movesString);
-
                     thisMoves = new Algorithm(algInput.getText());
                     // Set the initial scramble if not done
                     if (scramble == null) scramble = thisMoves;
 
+                    movesString += algInput.getText() + " ";
+                    moves = new Algorithm(movesString);
                     System.out.println(movesString);
                     System.out.println(moves.toCubeDB());
                     System.out.println(thisMoves.toCubeDB());
@@ -138,6 +137,7 @@ public class GUI extends JFrame implements ActionListener {
                             "Error in moves: " + except.getMessage(),
                             "Invalid moves", JOptionPane.ERROR_MESSAGE
                     );
+                    movesString = oldMovesString;
                     return;
                 }
                 thisMoves.execute(cube);
