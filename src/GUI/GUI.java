@@ -93,6 +93,14 @@ public class GUI extends JFrame implements ActionListener {
         algsMenuButton.addActionListener(this);
         add(algsMenuButton);
 
+        SolvingAlgorithm test = new SolvingAlgorithm(new String[] {"YRG,BYW,GOY", "R U R'"});
+        test.setBounds(800, 300, 200, 200);
+        add(test);
+
+        SideSticker testSide = new SideSticker(800, 500, java.awt.Color.YELLOW, true);
+        testSide.setBounds(800, 500, 200, 200);
+        add(testSide);
+
         // Drawing the cube
         this.cube = cube;
         upFace = new Face();

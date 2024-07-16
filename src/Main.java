@@ -1,4 +1,4 @@
-import GUI.GUI;
+import GUI.*;
 import cube.Cube;
 import types.Rotation;
 

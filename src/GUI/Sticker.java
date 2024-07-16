@@ -5,21 +5,27 @@ import java.awt.*;
 
 public class Sticker extends JPanel {
 
-    static final int width = 50;
-    static final int height = 50;
+    static final int baseWidth = 50;
+    static final int baseHeight = 50;
     int x;
     int y;
+    int width;
+    int height;
     java.awt.Color color;
 
     public Sticker(int x, int y, java.awt.Color color) {
         this.x = x;
         this.y = y;
+        this.width = baseWidth;
+        this.height = baseHeight;
         this.color = color;
     }
 
     public Sticker(int x, int y, types.Color color) {
         this.x = x;
         this.y = y;
+        this.width = baseWidth;
+        this.height = baseHeight;
         switch (color) {
             case WHITE -> this.color = java.awt.Color.WHITE;
             case GREEN -> this.color = java.awt.Color.GREEN;

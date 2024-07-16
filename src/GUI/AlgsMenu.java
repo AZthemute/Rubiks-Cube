@@ -18,6 +18,7 @@ public class AlgsMenu extends JFrame implements ActionListener {
 
         ArrayList<String[]> algs = FileHandler.readIntoCSV("wv.txt");
         for (String[] alg : algs) {
+            SolvingAlgorithm test = new SolvingAlgorithm(alg);
             mainPanel.add(createSection(Arrays.toString(alg)));
         }
 
