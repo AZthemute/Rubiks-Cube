@@ -3,10 +3,13 @@ package GUI;
 import cube.Algorithm;
 import types.Color;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class SolvingAlgorithm extends Face {
     Algorithm alg;
+    SideSticker sticker;
+    SideSticker sticker2;
 
     // todo: the custom CSV format with the faces
     public SolvingAlgorithm(String[] rawData) {
@@ -18,6 +21,22 @@ public class SolvingAlgorithm extends Face {
         });
         alg = new Algorithm(rawData[1]);
         System.out.println(alg.toCubeDB());
+        sticker = new SideSticker(150, 100, java.awt.Color.RED, true);
+        // note: everything draws relative to the top left corner. to fix.
+        sticker2 = new SideSticker(0, 0, java.awt.Color.RED, true);
+    }
+
+    @Override
+    public void paintComponent(Graphics graphics) {
+        System.out.println("Redrawing solvingalg");
+        for (Sticker[] topLevelStickers: this.stickers) {
+            for (Sticker sticker: topLevelStickers) {
+                if (sticker == null) continue;
+                sticker.paintComponent(graphics);
+            }
+        }
+        sticker.paintComponent(graphics);
+        sticker2.paintComponent(graphics);
     }
 
     private Color[] getColorsFromRawData(String face) {

@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Face extends JPanel {
-    private Sticker[][] stickers;
+    protected Sticker[][] stickers;
 
     public Face(Sticker[][] stickers) {
         this.stickers = stickers;

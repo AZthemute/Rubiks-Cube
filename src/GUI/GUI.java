@@ -7,6 +7,7 @@ import types.Color;
 import types.Rotation;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -94,12 +95,8 @@ public class GUI extends JFrame implements ActionListener {
         add(algsMenuButton);
 
         SolvingAlgorithm test = new SolvingAlgorithm(new String[] {"YRG,BYW,GOY", "R U R'"});
-        test.setBounds(800, 300, 200, 200);
+        test.setBounds(800, 300, 240, 240);
         add(test);
-
-        SideSticker testSide = new SideSticker(800, 500, java.awt.Color.YELLOW, true);
-        testSide.setBounds(800, 500, 200, 200);
-        add(testSide);
 
         // Drawing the cube
         this.cube = cube;
