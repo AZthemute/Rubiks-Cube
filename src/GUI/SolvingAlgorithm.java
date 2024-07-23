@@ -21,9 +21,9 @@ public class SolvingAlgorithm extends Face {
         });
         alg = new Algorithm(rawData[1]);
         System.out.println(alg.toCubeDB());
-        sticker = new SideSticker(150, 100, java.awt.Color.RED, true);
+        sticker = new SideSticker(120, 170, java.awt.Color.RED, false);
         // note: everything draws relative to the top left corner. to fix.
-        sticker2 = new SideSticker(0, 0, java.awt.Color.RED, true);
+        sticker2 = new SideSticker(0, 20, java.awt.Color.RED, true);
     }
 
     @Override

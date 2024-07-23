@@ -35,12 +35,13 @@ public class GUI extends JFrame implements ActionListener {
     private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
+    // slightly bigger than the actual face sizes to account for SolvingAlgorithm
     private static final int faceXOffset = 160;
     private static final int faceYOffset = 160;
-    private static final int faceXBase = 300;
-    private static final int faceYBase = 250;
-    private static final int faceWidth = 160;
-    private static final int faceHeight = 160;
+    private static final int faceXBase = 270;
+    private static final int faceYBase = 220;
+    private static final int faceWidth = 190;
+    private static final int faceHeight = 190;
 
     public GUI(Cube cube) {
         setTitle("Rubik's Cube");

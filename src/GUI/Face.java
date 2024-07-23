@@ -23,7 +23,7 @@ public class Face extends JPanel {
                     System.out.println(j);
                     continue;
                 }
-                stickers[i][j] = new Sticker(i*50, j*50, color);
+                stickers[i][j] = new Sticker(i*50+20, j*50+20, color);
             }
         }
     }
@@ -57,7 +57,7 @@ public class Face extends JPanel {
                     System.out.println(j);
                     continue;
                 }
-                stickers[i][j] = new Sticker(i*50, j*50, color);
+                stickers[i][j] = new Sticker(i*50+20, j*50+20, color);
             }
         }
     }
