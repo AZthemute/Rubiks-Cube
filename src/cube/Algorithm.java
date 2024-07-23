@@ -28,8 +28,11 @@ public class Algorithm {
 
             boolean isPrime = false;
             boolean isDouble = false;
-            // Choose the correct move type
-            switch (move.charAt(0)) {
+            boolean isWide = false;
+
+            // Choose the correct move type. The character is forced to uppercase
+            // in order to easily support wide moves.
+            switch (Character.toUpperCase(move.charAt(0))) {
                 case 'U' -> moveType = Rotation.UP;
                 case 'E' -> moveType = Rotation.EQUATOR;
                 case 'D' -> moveType = Rotation.DOWN;
@@ -39,13 +42,15 @@ public class Algorithm {
                 case 'L' -> moveType = Rotation.LEFT;
                 case 'M' -> moveType = Rotation.MIDDLE;
                 case 'R' -> moveType = Rotation.RIGHT;
-                case 'x' -> moveType = Rotation.CubeRotation.X;
-                case 'y' -> moveType = Rotation.CubeRotation.Y;
-                case 'z' -> moveType = Rotation.CubeRotation.Z;
+                case 'X' -> moveType = Rotation.CubeRotation.X;
+                case 'Y' -> moveType = Rotation.CubeRotation.Y;
+                case 'Z' -> moveType = Rotation.CubeRotation.Z;
                 default -> throw createIllegalMoveException(move);
             }
 
             // Check modifiers, if any
+            if (Character.isLowerCase(move.charAt(0))) isWide = true;
+
             if (move.length() == 2) {
                 if (move.charAt(1) == '\'') isPrime = true;
                 else if (move.charAt(1) == '2') isDouble = true;
@@ -60,7 +65,7 @@ public class Algorithm {
             }
 
             // todo: treat R2' as R2, R3 = R', etc
-            moves.add(new Move<>(moveType, isPrime, isDouble));
+            moves.add(new Move<>(moveType, isPrime, isDouble, isWide));
         }
     }
 
@@ -71,7 +76,10 @@ public class Algorithm {
     public void execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed
         for (Move<MoveOnCube> move : moves) {
-            if (move.type.getClass() == Rotation.class) cube.move((Rotation) move.type, move.isPrime, move.isDouble);
+            if (move.type.getClass() == Rotation.class) {
+                cube.move((Rotation) move.type, move.isPrime, move.isDouble);
+                if (move.isWide) cube.move(Rotation.MIDDLE, move.isPrimeForWide(), move.isDouble);
+            }
             else cube.move((Rotation.CubeRotation) move.type, move.isPrime, move.isDouble);
         }
     }
@@ -109,7 +117,15 @@ public class Algorithm {
     /**
      * Helper record for one move. The type parameter must implement the MoveOnCube interface.
      */
-    public record Move<T extends MoveOnCube>(T type, boolean isPrime, boolean isDouble) {}
+    public record Move<T extends MoveOnCube>(T type, boolean isPrime, boolean isDouble, boolean isWide) {
+        /**
+         * Helper method for executing.
+         */
+        public boolean isPrimeForWide() {
+            if ((type == Rotation.RIGHT) || (type == Rotation.BACK) || (type == Rotation.UP)) {return !isPrime;}
+            return isPrime;
+        }
+    }
 
     /**
      * Hardcoded illegal move exception.

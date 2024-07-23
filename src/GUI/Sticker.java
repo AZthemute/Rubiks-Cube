@@ -38,7 +38,6 @@ public class Sticker extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        System.out.println("Drawing!");
         Graphics2D g = (Graphics2D) graphics;
         g.setColor(java.awt.Color.blue);
         // Set the position and size of the rectangle

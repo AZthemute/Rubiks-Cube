@@ -78,13 +78,11 @@ public abstract class Piece {
                 if (oldColors.get(Rotation.UP) != null) {
                     // UBM
                     if (oldColors.get(Rotation.BACK) != null) {
-                        System.out.println("UB layer");
                         colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                         colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                     }
                     // UFM
                     else if (oldColors.get(Rotation.FRONT) != null) {
-                        System.out.println("UF layer");
                         colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                         colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                     }
@@ -97,13 +95,11 @@ public abstract class Piece {
                 else if (oldColors.get(Rotation.DOWN) != null) {
                     // DBM
                     if (oldColors.get(Rotation.BACK) != null) {
-                        System.out.println("DB layer");
                         colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                         colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                     }
                     // DFM
                     else if (oldColors.get(Rotation.FRONT) != null) {
-                        System.out.println("DF layer");
                         colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                         colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                     }
