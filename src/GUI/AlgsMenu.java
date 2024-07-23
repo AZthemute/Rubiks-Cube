@@ -18,8 +18,8 @@ public class AlgsMenu extends JFrame implements ActionListener {
 
         ArrayList<String[]> algs = FileHandler.readIntoCSV("wv.txt");
         for (String[] alg : algs) {
-            SolvingAlgorithm test = new SolvingAlgorithm(alg);
-            mainPanel.add(createSection(Arrays.toString(alg)));
+            SolvingAlgorithm face = new SolvingAlgorithm(alg);
+            mainPanel.add(createSection(Arrays.toString(alg), face));
         }
 
         JScrollPane scrollPane = new JScrollPane(mainPanel);
@@ -29,7 +29,7 @@ public class AlgsMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private JPanel createSection(String text) {
+    private JPanel createSection(String text, SolvingAlgorithm algorithm) {
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -40,6 +40,18 @@ public class AlgsMenu extends JFrame implements ActionListener {
         };
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
+        // Add the SolvingAlgorithm panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 2; // Span two rows
+        gbc.weightx = 0.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(algorithm, gbc);
 
         JLabel label = new JLabel(text);
         gbc.gridx = 0;

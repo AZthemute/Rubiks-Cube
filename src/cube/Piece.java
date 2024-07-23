@@ -43,12 +43,12 @@ public abstract class Piece {
     }
 
     /**
-     * Method to simulate an move in the R direction on a piece.
+     * Method to simulate a move in the R direction on a piece.
      * <p>
      * This method only moves around the colours, since the position
      * of the piece on the cube is tracked by the Cube object.
      */
-    public HashMap<Rotation, Color> moveR(boolean isPrime) {
+    public void moveR(boolean isPrime) {
         if (isPrime) {
             move(Rotation.CubeRotation.Z, false, true);
         }
@@ -173,48 +173,6 @@ public abstract class Piece {
                 colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
         }
-        return colors;
-    }
-
-    /**
-     * Simulate a move on a single piece.
-     * @param move The type of move, except rotations (this has an overloaded method).
-     * @param isPrime If the move is prime or not.
-     * @param isDouble If the move is double or not.
-     */
-    public void move(Rotation move, boolean isPrime, boolean isDouble) {
-        // This works by temporarily rotating pieces
-        switch (move) {
-            case BACK -> {
-            }
-            case RIGHT -> {
-                moveR(isPrime);
-            }
-            case FRONT -> {
-            }
-            case LEFT -> {
-            }
-            case UP -> {
-                if (!isPrime) {
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                    moveR(false);
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                }
-                else {
-                    move(Rotation.CubeRotation.Z, true, isDouble);
-                    moveR(true);
-                    move(Rotation.CubeRotation.Z, false, isDouble);
-                }
-            }
-            case DOWN -> {
-            }
-            case MIDDLE -> {
-            }
-            case EQUATOR -> {
-            }
-            case STANDING -> {
-            }
-        }
     }
 
     /**
@@ -280,9 +238,6 @@ public abstract class Piece {
                 // If on down
                 else if (oldColors.get(Rotation.DOWN) != null) {
                     colors.put(Rotation.LEFT, oldColors.get(Rotation.DOWN));
-                }
-                // If on middle (not corner)
-                else {
                 }
             }
         }

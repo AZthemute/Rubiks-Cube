@@ -186,7 +186,7 @@ public class GUI extends JFrame implements ActionListener {
                 if (toReset == JOptionPane.YES_OPTION) {
                     this.cube = new Cube();
                     this.scramble = null;
-                    this.movesString = null;
+                    this.movesString = "";
                     this.moves = null;
                     drawCube();
                 }

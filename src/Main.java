@@ -2,8 +2,6 @@ import GUI.*;
 import cube.Cube;
 import types.Rotation;
 
-import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
         Cube cube = new Cube();

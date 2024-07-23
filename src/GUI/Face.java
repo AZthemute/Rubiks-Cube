@@ -8,26 +8,6 @@ import java.awt.*;
 public class Face extends JPanel {
     protected Sticker[][] stickers;
 
-    public Face(Sticker[][] stickers) {
-        this.stickers = stickers;
-    }
-
-    public Face(types.Color[][] colors) {
-        this.stickers = new Sticker[3][3];
-        for (int i = 0; i <= 2; i++) {
-            types.Color[] topLevelColors = colors[i];
-            for (int j = 0; j <= 2; j++) {
-                types.Color color = topLevelColors[j];
-                if (color == null) {
-                    System.out.println(i);
-                    System.out.println(j);
-                    continue;
-                }
-                stickers[i][j] = new Sticker(i*50+20, j*50+20, color);
-            }
-        }
-    }
-
     public Face() {
         this.stickers = new Sticker[3][3];
     }
@@ -40,10 +20,6 @@ public class Face extends JPanel {
                 sticker.paintComponent(graphics);
             }
         }
-    }
-
-    public void setStickers(Sticker[][] stickers) {
-        this.stickers = stickers;
     }
 
     public void setStickers(types.Color[][] colors) {

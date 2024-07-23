@@ -4,7 +4,6 @@ import cube.Algorithm;
 import types.Color;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class SolvingAlgorithm extends Face {
     Algorithm alg;
@@ -28,7 +27,6 @@ public class SolvingAlgorithm extends Face {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        System.out.println("Redrawing solvingalg");
         for (Sticker[] topLevelStickers: this.stickers) {
             for (Sticker sticker: topLevelStickers) {
                 if (sticker == null) continue;

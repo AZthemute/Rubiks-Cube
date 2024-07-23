@@ -2,16 +2,10 @@ package cube;
 
 import types.Color;
 import types.PieceType;
-import types.Rotation;
 
 import java.util.HashMap;
 
 public class CornerPiece extends Piece {
-    public CornerPiece(HashMap<Rotation, Color> colors) {
-        super(colors);
-        // todo: throw IllegalArgumentException if there are not 3 colors present
-    }
-
     /**
      * @param colors Unordered array of colors that the piece contains.
      */

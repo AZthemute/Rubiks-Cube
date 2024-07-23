@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * Represents a set of moves on the cube. May be turned into static later.
  */
 public class Algorithm {
-    private ArrayList<Move> moves = new ArrayList<>();
+    @SuppressWarnings("FieldMayBeFinal")
+    private ArrayList<Move<MoveOnCube>> moves = new ArrayList<>();
 
     /**
      * Construct a new Algorithm. This currently does not support wide
@@ -21,11 +22,9 @@ public class Algorithm {
         String[] splitAlgorithm = alg.split(" ");
         for (String move: splitAlgorithm) {
             if (move.length() > 3) throw createIllegalMoveException(move);
-            if (move.length() == 0) continue; // In case of typos creating a double  space
+            if (move.isEmpty()) continue; // In case of typos creating a double  space
 
-            Rotation moveType = null;
-            // because private classes are weird
-            Rotation.CubeRotation rotationMoveType = null;
+            MoveOnCube moveType;
 
             boolean isPrime = false;
             boolean isDouble = false;
@@ -40,9 +39,9 @@ public class Algorithm {
                 case 'L' -> moveType = Rotation.LEFT;
                 case 'M' -> moveType = Rotation.MIDDLE;
                 case 'R' -> moveType = Rotation.RIGHT;
-                case 'x' -> rotationMoveType = Rotation.CubeRotation.X;
-                case 'y' -> rotationMoveType = Rotation.CubeRotation.Y;
-                case 'z' -> rotationMoveType = Rotation.CubeRotation.Z;
+                case 'x' -> moveType = Rotation.CubeRotation.X;
+                case 'y' -> moveType = Rotation.CubeRotation.Y;
+                case 'z' -> moveType = Rotation.CubeRotation.Z;
                 default -> throw createIllegalMoveException(move);
             }
 
@@ -61,46 +60,44 @@ public class Algorithm {
             }
 
             // todo: treat R2' as R2, R3 = R', etc
-            if (moveType != null) moves.add(new Move(moveType, isPrime, isDouble));
-            else moves.add(new Move(rotationMoveType, isPrime, isDouble));
+            moves.add(new Move<>(moveType, isPrime, isDouble));
         }
     }
 
     /**
      * Executes this algorithm on a cube.
-     * @param cube The cube.
-     * @return The cube.
+     * @param cube The cube to execute the algorithm on.
      */
-    public Cube execute(Cube cube) {
+    public void execute(Cube cube) {
         // todo: parse moves array and call Cube functions based on what is parsed
-        for (Move move : moves) {
-            /*
-            System.out.println(move.type);
-            System.out.println(move.isPrime);
-            System.out.println(move.isDouble);
-             */
+        for (Move<MoveOnCube> move : moves) {
             if (move.type.getClass() == Rotation.class) cube.move((Rotation) move.type, move.isPrime, move.isDouble);
             else cube.move((Rotation.CubeRotation) move.type, move.isPrime, move.isDouble);
         }
-        return cube;
     }
 
+    /**
+     * @return The Algorithm formatted for CubeDB URLs
+     */
     public String toCubeDB() {
-        StringBuilder alg = new StringBuilder("");
-        for (Move move : moves) {
+        StringBuilder alg = new StringBuilder();
+        for (Move<MoveOnCube> move : moves) {
             // todo
-            if (move.type.equals(Rotation.BACK)) alg.append('B');
-            else if (move.type.equals(Rotation.RIGHT)) alg.append('R');
-            else if (move.type.equals(Rotation.FRONT)) alg.append('F');
-            else if (move.type.equals(Rotation.LEFT)) alg.append('L');
-            else if (move.type.equals(Rotation.UP)) alg.append('U');
-            else if (move.type.equals(Rotation.DOWN)) alg.append('D');
-            else if (move.type.equals(Rotation.MIDDLE)) alg.append('M');
-            else if (move.type.equals(Rotation.EQUATOR)) alg.append('E');
-            else if (move.type.equals(Rotation.STANDING)) alg.append('S');
-            else if (move.type.equals(Rotation.CubeRotation.X)) alg.append('x');
-            else if (move.type.equals(Rotation.CubeRotation.Y)) alg.append('y');
-            else if (move.type.equals(Rotation.CubeRotation.Z)) alg.append('z');
+            switch (move.type) {
+                case Rotation.BACK -> alg.append('B');
+                case Rotation.RIGHT -> alg.append('R');
+                case Rotation.FRONT -> alg.append('F');
+                case Rotation.LEFT -> alg.append('L');
+                case Rotation.UP -> alg.append('U');
+                case Rotation.DOWN -> alg.append('D');
+                case Rotation.MIDDLE -> alg.append('M');
+                case Rotation.EQUATOR -> alg.append('E');
+                case Rotation.STANDING -> alg.append('S');
+                case Rotation.CubeRotation.X -> alg.append('x');
+                case Rotation.CubeRotation.Y -> alg.append('y');
+                case Rotation.CubeRotation.Z -> alg.append('z');
+                default -> throw new IllegalStateException("Unexpected value: " + move.type);
+            }
 
             if (move.isDouble) alg.append('2');
             if (move.isPrime) alg.append('-');
@@ -110,14 +107,14 @@ public class Algorithm {
     }
 
     /**
-     * Helper record for one move. Todo: allow CubeRotation
+     * Helper record for one move. The type parameter must implement the MoveOnCube interface.
      */
-    public record Move<T extends MoveOnCube>(T type, boolean isPrime, boolean isDouble) implements MoveOnCube {}
+    public record Move<T extends MoveOnCube>(T type, boolean isPrime, boolean isDouble) {}
 
     /**
      * Hardcoded illegal move exception.
-     * @param move
-     * @return
+     * @param move The illegal move.
+     * @return The exception to be thrown.
      */
     private static IllegalArgumentException createIllegalMoveException(String move) {
         return new IllegalArgumentException("Move type \"" + move + "\" is invalid.");

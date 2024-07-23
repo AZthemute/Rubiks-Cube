@@ -22,7 +22,7 @@ public class FileHandler {
         ArrayList<String> fileContents = new ArrayList<>();
         try (
                 FileReader fr = new FileReader(fileName);
-                BufferedReader br = new BufferedReader(fr);
+                BufferedReader br = new BufferedReader(fr)
         ) {
             String line = br.readLine();
             while (line != null) {
