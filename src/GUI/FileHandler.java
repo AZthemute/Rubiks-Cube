@@ -4,12 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class FileHandler {
-    public static ArrayList<String[]> readIntoCSV(String filename) {
+    public static ArrayList<String[]> readIntoTSV(String filename) {
         ArrayList<String[]> contents = new ArrayList<>();
         ArrayList<String> rawFileContents = readFromFile(filename);
 
         for (int i = 0; i < rawFileContents.size(); i++) {
-            String[] record = rawFileContents.get(i).split(",");
+            String[] record = rawFileContents.get(i).split("\t");
             System.out.println(record);
             contents.add(record);
         }

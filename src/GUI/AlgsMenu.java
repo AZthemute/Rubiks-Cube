@@ -16,10 +16,10 @@ public class AlgsMenu extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        ArrayList<String[]> algs = FileHandler.readIntoCSV("wv.txt");
+        ArrayList<String[]> algs = FileHandler.readIntoTSV("wv.txt");
         for (String[] alg : algs) {
             SolvingAlgorithm face = new SolvingAlgorithm(alg);
-            mainPanel.add(createSection(Arrays.toString(alg), face));
+            mainPanel.add(createSection(face.alg.toString(), face));
         }
 
         JScrollPane scrollPane = new JScrollPane(mainPanel);

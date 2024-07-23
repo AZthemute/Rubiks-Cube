@@ -95,9 +95,9 @@ public class GUI extends JFrame implements ActionListener {
         algsMenuButton.addActionListener(this);
         add(algsMenuButton);
 
-        SolvingAlgorithm test = new SolvingAlgorithm(new String[] {"YRG,BYW,GOY", "R U R'"});
-        test.setBounds(800, 300, 240, 240);
-        add(test);
+        //SolvingAlgorithm test = new SolvingAlgorithm(new String[] {"YRG,BYW,GOY", "R U R'"});
+        //test.setBounds(800, 300, 240, 240);
+        //add(test);
 
         // Drawing the cube
         this.cube = cube;
@@ -120,7 +120,7 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Execute" -> {
-                if (algInput.getText().equals("")) {
+                if (algInput.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this,
                             "Please input some moves. ",
                             "Invalid moves", JOptionPane.ERROR_MESSAGE
@@ -203,17 +203,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] upFaceStickers = {
                 {
                         upLayer.get("UBL").getColors().get(Rotation.UP),
-                        upLayer.get("USL").getColors().get(Rotation.UP),
-                        upLayer.get("UFL").getColors().get(Rotation.UP),
-                },
-                {
                         upLayer.get("UBM").getColors().get(Rotation.UP),
-                        upLayer.get("USM").getColors().get(Rotation.UP),
-                        upLayer.get("UFM").getColors().get(Rotation.UP),
+                        upLayer.get("UBR").getColors().get(Rotation.UP),
                 },
                 {
-                        upLayer.get("UBR").getColors().get(Rotation.UP),
+                        upLayer.get("USL").getColors().get(Rotation.UP),
+                        upLayer.get("USM").getColors().get(Rotation.UP),
                         upLayer.get("USR").getColors().get(Rotation.UP),
+                },
+                {
+                        upLayer.get("UFL").getColors().get(Rotation.UP),
+                        upLayer.get("UFM").getColors().get(Rotation.UP),
                         upLayer.get("UFR").getColors().get(Rotation.UP),
                 }
         };
@@ -221,17 +221,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] frontFaceStickers = {
                 {
                         upLayer.get("UFL").getColors().get(Rotation.FRONT),
-                        equatorLayer.get("EFL").getColors().get(Rotation.FRONT),
-                        downLayer.get("DFL").getColors().get(Rotation.FRONT),
-                },
-                {
                         upLayer.get("UFM").getColors().get(Rotation.FRONT),
-                        equatorLayer.get("EFM").getColors().get(Rotation.FRONT),
-                        downLayer.get("DFM").getColors().get(Rotation.FRONT),
+                        upLayer.get("UFR").getColors().get(Rotation.FRONT),
                 },
                 {
-                        upLayer.get("UFR").getColors().get(Rotation.FRONT),
+                        equatorLayer.get("EFL").getColors().get(Rotation.FRONT),
+                        equatorLayer.get("EFM").getColors().get(Rotation.FRONT),
                         equatorLayer.get("EFR").getColors().get(Rotation.FRONT),
+                },
+                {
+                        downLayer.get("DFL").getColors().get(Rotation.FRONT),
+                        downLayer.get("DFM").getColors().get(Rotation.FRONT),
                         downLayer.get("DFR").getColors().get(Rotation.FRONT),
                 }
         };
@@ -240,17 +240,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] leftFaceStickers = {
                 {
                         upLayer.get("UBL").getColors().get(Rotation.LEFT),
-                        equatorLayer.get("EBL").getColors().get(Rotation.LEFT),
-                        downLayer.get("DBL").getColors().get(Rotation.LEFT),
-                },
-                {
                         upLayer.get("USL").getColors().get(Rotation.LEFT),
-                        equatorLayer.get("ESL").getColors().get(Rotation.LEFT),
-                        downLayer.get("DSL").getColors().get(Rotation.LEFT),
+                        upLayer.get("UFL").getColors().get(Rotation.LEFT),
                 },
                 {
-                        upLayer.get("UFL").getColors().get(Rotation.LEFT),
+                        equatorLayer.get("EBL").getColors().get(Rotation.LEFT),
+                        equatorLayer.get("ESL").getColors().get(Rotation.LEFT),
                         equatorLayer.get("EFL").getColors().get(Rotation.LEFT),
+                },
+                {
+                        downLayer.get("DBL").getColors().get(Rotation.LEFT),
+                        downLayer.get("DSL").getColors().get(Rotation.LEFT),
                         downLayer.get("DFL").getColors().get(Rotation.LEFT),
                 }
         };
@@ -259,17 +259,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] rightFaceStickers = {
                 {
                         upLayer.get("UFR").getColors().get(Rotation.RIGHT),
-                        equatorLayer.get("EFR").getColors().get(Rotation.RIGHT),
-                        downLayer.get("DFR").getColors().get(Rotation.RIGHT),
-                },
-                {
                         upLayer.get("USR").getColors().get(Rotation.RIGHT),
-                        equatorLayer.get("ESR").getColors().get(Rotation.RIGHT),
-                        downLayer.get("DSR").getColors().get(Rotation.RIGHT),
+                        upLayer.get("UBR").getColors().get(Rotation.RIGHT),
                 },
                 {
-                        upLayer.get("UBR").getColors().get(Rotation.RIGHT),
+                        equatorLayer.get("EFR").getColors().get(Rotation.RIGHT),
+                        equatorLayer.get("ESR").getColors().get(Rotation.RIGHT),
                         equatorLayer.get("EBR").getColors().get(Rotation.RIGHT),
+                },
+                {
+                        downLayer.get("DFR").getColors().get(Rotation.RIGHT),
+                        downLayer.get("DSR").getColors().get(Rotation.RIGHT),
                         downLayer.get("DBR").getColors().get(Rotation.RIGHT),
                 }
         };
@@ -278,17 +278,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] backFaceStickers = {
                 {
                         upLayer.get("UBR").getColors().get(Rotation.BACK),
-                        equatorLayer.get("EBR").getColors().get(Rotation.BACK),
-                        downLayer.get("DBR").getColors().get(Rotation.BACK),
-                },
-                {
                         upLayer.get("UBM").getColors().get(Rotation.BACK),
-                        equatorLayer.get("EBM").getColors().get(Rotation.BACK),
-                        downLayer.get("DBM").getColors().get(Rotation.BACK),
+                        upLayer.get("UBL").getColors().get(Rotation.BACK),
                 },
                 {
-                        upLayer.get("UBL").getColors().get(Rotation.BACK),
+                        equatorLayer.get("EBR").getColors().get(Rotation.BACK),
+                        equatorLayer.get("EBM").getColors().get(Rotation.BACK),
                         equatorLayer.get("EBL").getColors().get(Rotation.BACK),
+                },
+                {
+                        downLayer.get("DBR").getColors().get(Rotation.BACK),
+                        downLayer.get("DBM").getColors().get(Rotation.BACK),
                         downLayer.get("DBL").getColors().get(Rotation.BACK),
                 }
         };
@@ -297,17 +297,17 @@ public class GUI extends JFrame implements ActionListener {
         Color[][] downFaceStickers = {
                 {
                         downLayer.get("DFL").getColors().get(Rotation.DOWN),
-                        downLayer.get("DSL").getColors().get(Rotation.DOWN),
-                        downLayer.get("DBL").getColors().get(Rotation.DOWN),
-                },
-                {
                         downLayer.get("DFM").getColors().get(Rotation.DOWN),
-                        downLayer.get("DSM").getColors().get(Rotation.DOWN),
-                        downLayer.get("DBM").getColors().get(Rotation.DOWN),
+                        downLayer.get("DFR").getColors().get(Rotation.DOWN),
                 },
                 {
-                        downLayer.get("DFR").getColors().get(Rotation.DOWN),
+                        downLayer.get("DSL").getColors().get(Rotation.DOWN),
+                        downLayer.get("DSM").getColors().get(Rotation.DOWN),
                         downLayer.get("DSR").getColors().get(Rotation.DOWN),
+                },
+                {
+                        downLayer.get("DBL").getColors().get(Rotation.DOWN),
+                        downLayer.get("DBM").getColors().get(Rotation.DOWN),
                         downLayer.get("DBR").getColors().get(Rotation.DOWN),
                 }
         };

@@ -2,27 +2,56 @@ package GUI;
 
 import cube.Algorithm;
 import types.Color;
+import types.Rotation;
 
 import java.awt.*;
 
 public class SolvingAlgorithm extends Face {
     Algorithm alg;
-    SideSticker sticker;
-    SideSticker sticker2;
+    SideSticker[][] sideStickers = new SideSticker[4][3];
+
+    static final int sideStickerXOffset = 20;
+    static final int sideStickerYOffset = 20;
+    static final int sideStickerWidth = 50;
+    static final int sideStickerHeight = 50;
 
     // todo: the custom CSV format with the faces
     public SolvingAlgorithm(String[] rawData) {
+        System.out.println(rawData[0]);
         String[] upFaceString = rawData[0].split(",");
         this.setStickers(new Color[][] {
                 getColorsFromRawData(upFaceString[0]),
                 getColorsFromRawData(upFaceString[1]),
                 getColorsFromRawData(upFaceString[2])
         });
-        alg = new Algorithm(rawData[1]);
-        System.out.println(alg.toCubeDB());
-        sticker = new SideSticker(120, 170, java.awt.Color.RED, false);
-        // note: everything draws relative to the top left corner. to fix.
-        sticker2 = new SideSticker(0, 20, java.awt.Color.RED, true);
+        // In the future, I may allow reading in multiple algorithms.
+        alg = new Algorithm(rawData[5]);
+        sideStickers[0] = buildSideStickers(rawData[1], Rotation.LEFT);
+        sideStickers[1] = buildSideStickers(rawData[2], Rotation.FRONT);
+        sideStickers[2] = buildSideStickers(rawData[3], Rotation.RIGHT);
+        sideStickers[3] = buildSideStickers(rawData[4], Rotation.BACK);
+    }
+
+    private SideSticker[] buildSideStickers(String rawData, Rotation face) {
+        SideSticker[] sideStickers;
+        int xOffset = 0;
+        int yOffset = 0;
+        if (face == Rotation.RIGHT) xOffset = 170;
+        if (face == Rotation.FRONT) yOffset = 170;
+        switch (face) {
+            case LEFT, RIGHT -> sideStickers = new SideSticker[] {
+                    new SideSticker(xOffset, 20, stringToAWTColor(rawData.charAt(0)), true),
+                    new SideSticker(xOffset, 70, stringToAWTColor(rawData.charAt(1)), true),
+                    new SideSticker(xOffset, 120, stringToAWTColor(rawData.charAt(2)), true),
+            };
+            case FRONT, BACK -> sideStickers = new SideSticker[] {
+                    new SideSticker(20, yOffset, stringToAWTColor(rawData.charAt(0)), false),
+                    new SideSticker(70, yOffset, stringToAWTColor(rawData.charAt(1)), false),
+                    new SideSticker(120, yOffset, stringToAWTColor(rawData.charAt(2)), false),
+            };
+            default -> throw new IllegalArgumentException("Invalid face: " + face);
+        }
+        return sideStickers;
     }
 
     @Override
@@ -33,8 +62,12 @@ public class SolvingAlgorithm extends Face {
                 sticker.paintComponent(graphics);
             }
         }
-        sticker.paintComponent(graphics);
-        sticker2.paintComponent(graphics);
+        for (SideSticker[] topLevelSideStickers: this.sideStickers) {
+            for (SideSticker sticker: topLevelSideStickers) {
+                if (sticker == null) continue;
+                sticker.paintComponent(graphics);
+            }
+        }
     }
 
     private Color[] getColorsFromRawData(String face) {
@@ -54,6 +87,19 @@ public class SolvingAlgorithm extends Face {
             case 'O' -> Color.ORANGE;
             case 'Y' -> Color.YELLOW;
             case 'B' -> Color.BLUE;
+            default -> throw new IllegalStateException("Unexpected color: " + s);
+        };
+    }
+
+    private java.awt.Color stringToAWTColor(char s) {
+        return switch (s) {
+            case 'W' -> java.awt.Color.WHITE;
+            case 'G' -> java.awt.Color.GREEN;
+            case 'R' -> java.awt.Color.RED;
+            case 'O' -> java.awt.Color.ORANGE;
+            case 'Y' -> java.awt.Color.YELLOW;
+            case 'B' -> java.awt.Color.BLUE;
+            case 'N' -> java.awt.Color.GRAY; // No sticker exists
             default -> throw new IllegalStateException("Unexpected color: " + s);
         };
     }

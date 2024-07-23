@@ -90,7 +90,6 @@ public class Algorithm {
     public String toCubeDB() {
         StringBuilder alg = new StringBuilder();
         for (Move<MoveOnCube> move : moves) {
-            // todo
             switch (move.type) {
                 case Rotation.BACK -> alg.append('B');
                 case Rotation.RIGHT -> alg.append('R');
@@ -110,6 +109,35 @@ public class Algorithm {
             if (move.isDouble) alg.append('2');
             if (move.isPrime) alg.append('-');
             alg.append('_');
+        }
+        return alg.toString();
+    }
+
+    /**
+     * @return The Algorithm formatted for CubeDB URLs
+     */
+    public String toString() {
+        StringBuilder alg = new StringBuilder();
+        for (Move<MoveOnCube> move : moves) {
+            switch (move.type) {
+                case Rotation.BACK -> alg.append('B');
+                case Rotation.RIGHT -> alg.append('R');
+                case Rotation.FRONT -> alg.append('F');
+                case Rotation.LEFT -> alg.append('L');
+                case Rotation.UP -> alg.append('U');
+                case Rotation.DOWN -> alg.append('D');
+                case Rotation.MIDDLE -> alg.append('M');
+                case Rotation.EQUATOR -> alg.append('E');
+                case Rotation.STANDING -> alg.append('S');
+                case Rotation.CubeRotation.X -> alg.append('x');
+                case Rotation.CubeRotation.Y -> alg.append('y');
+                case Rotation.CubeRotation.Z -> alg.append('z');
+                default -> throw new IllegalStateException("Unexpected value: " + move.type);
+            }
+
+            if (move.isDouble) alg.append('2');
+            if (move.isPrime) alg.append('\'');
+            alg.append(' ');
         }
         return alg.toString();
     }
