@@ -16,7 +16,7 @@ public class AlgsMenu extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        ArrayList<String[]> algs = FileHandler.readIntoTSV("wv.txt");
+        ArrayList<String[]> algs = FileHandler.readIntoTSV("wv.tsv");
         for (String[] alg : algs) {
             SolvingAlgorithm face = new SolvingAlgorithm(alg);
             mainPanel.add(createSection(face.alg.toString(), face));
@@ -38,58 +38,26 @@ public class AlgsMenu extends JFrame implements ActionListener {
                 g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1); // Bottom line
             }
         };
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        panel.setLayout(null);
 
-        // Add the SolvingAlgorithm panel
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.gridheight = 2; // Span two rows
-        gbc.weightx = 0.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(algorithm, gbc);
+        algorithm.setBounds(10, 10, 200, 200);
 
-        JLabel label = new JLabel(text);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 3;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        panel.add(label, gbc);
-
-        // Filler component to push buttons to the right
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(Box.createHorizontalGlue(), gbc);
+        JLabel algText = new JLabel(text);
+        algText.setBounds(220, 80, 100, 50);
 
         JButton reverseButton = new JButton("Reverse");
         reverseButton.addActionListener(AlgsMenu.this);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0.0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 10, 5);
-        panel.add(reverseButton, gbc);
+        reverseButton.setBounds(380, 90, 90, 30);
 
         JButton executeButton = new JButton("Execute");
         executeButton.addActionListener(AlgsMenu.this);
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 10, 10);
-        panel.add(executeButton, gbc);
+        executeButton.setBounds(470, 90, 90, 30);
 
-        panel.setPreferredSize(new Dimension(350, 100));
+        panel.add(algorithm);
+        panel.add(algText);
+        panel.add(reverseButton);
+        panel.add(executeButton);
+        panel.setPreferredSize(new Dimension(350, 210));
         return panel;
     }
 

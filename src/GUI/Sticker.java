@@ -33,6 +33,7 @@ public class Sticker extends JPanel {
             case ORANGE -> this.color = java.awt.Color.ORANGE;
             case YELLOW -> this.color = java.awt.Color.YELLOW;
             case BLUE -> this.color = java.awt.Color.BLUE;
+            case null -> this.color = java.awt.Color.GRAY;
         }
     }
 

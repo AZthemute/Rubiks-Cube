@@ -7,7 +7,6 @@ import types.Color;
 import types.Rotation;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -137,10 +136,12 @@ public class GUI extends JFrame implements ActionListener {
 
                     movesString += algInput.getText() + " ";
                     moves = new Algorithm(movesString);
+                    /*
                     System.out.println(movesString);
                     System.out.println(moves.toCubeDB());
                     System.out.println(thisMoves.toCubeDB());
                     System.out.println(scramble.toCubeDB());
+                     */
                 }
                 catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
                     JOptionPane.showMessageDialog(this,
@@ -312,12 +313,12 @@ public class GUI extends JFrame implements ActionListener {
                 }
         };
 
-        upFace.setStickers(upFaceStickers);
-        frontFace.setStickers(frontFaceStickers);
-        leftFace.setStickers(leftFaceStickers);
-        rightFace.setStickers(rightFaceStickers);
-        backFace.setStickers(backFaceStickers);
-        downFace.setStickers(downFaceStickers);
+        upFace.setStickers(upFaceStickers, false);
+        frontFace.setStickers(frontFaceStickers, false);
+        leftFace.setStickers(leftFaceStickers, false);
+        rightFace.setStickers(rightFaceStickers, false);
+        backFace.setStickers(backFaceStickers, false);
+        downFace.setStickers(downFaceStickers, false);
 
         add(upFace);
         add(frontFace);

@@ -8,9 +8,11 @@ public class FileHandler {
         ArrayList<String[]> contents = new ArrayList<>();
         ArrayList<String> rawFileContents = readFromFile(filename);
 
-        for (int i = 0; i < rawFileContents.size(); i++) {
-            String[] record = rawFileContents.get(i).split("\t");
-            System.out.println(record);
+        for (String entry : rawFileContents) {
+            // Ignore comments. Not sure if # is better, but I'm using // because java.
+            if (entry.startsWith("//")) continue;
+
+            String[] record = entry.split("\t");
             contents.add(record);
         }
 
@@ -18,7 +20,6 @@ public class FileHandler {
     }
 
     public static ArrayList<String> readFromFile(String fileName) {
-        // using best-practice exception handling
         ArrayList<String> fileContents = new ArrayList<>();
         try (
                 FileReader fr = new FileReader(fileName);

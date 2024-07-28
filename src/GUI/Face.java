@@ -22,17 +22,13 @@ public class Face extends JPanel {
         }
     }
 
-    public void setStickers(types.Color[][] colors) {
+    public void setStickers(Color[][] colors, boolean allowNull) {
         this.stickers = new Sticker[3][3];
         for (int i = 0; i <= 2; i++) {
             types.Color[] topLevelColors = colors[i];
             for (int j = 0; j <= 2; j++) {
                 Color color = topLevelColors[j];
-                if (color == null) {
-                    System.out.println(i);
-                    System.out.println(j);
-                    continue;
-                }
+                if (color == null && !allowNull) continue;
                 stickers[i][j] = new Sticker(j*50+20, i*50+20, color);
             }
         }

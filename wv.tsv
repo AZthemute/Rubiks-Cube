@@ -1,0 +1,8 @@
+// Up, Left, Front, Right, Back, Algorithm
+// The up face is a CSV string that can be read as a 2D array representing the colours on that face.
+// The other faces are read anti-clockwise.
+YYY,YYY,BBY	NNW	RRN	NNN	NNN	L' U2 R U R' U2 L
+YYY,YYY,BBN	NNW	RRY	NNN	NNN	R U' R'
+YYY,YYY,BBY	NNW	RRN	YNN	NNN	U' R' F R U R U' R' F'
+YYN,YYY,BBY	NNW	RRN	NNY	NNN	R2 D R' U' R D' R2
+YYN,YYY,BBY	NNW	RRN	NNN	NNY	R U' R' U R' U' R U' R' U2 R
