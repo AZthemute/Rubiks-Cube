@@ -5,6 +5,7 @@ import types.Color;
 import types.Rotation;
 
 import java.awt.*;
+import java.util.Collections;
 
 public class SolvingAlgorithm extends Face {
     Algorithm alg;
@@ -25,28 +26,38 @@ public class SolvingAlgorithm extends Face {
         }, true);
         // In the future, I may allow reading in multiple algorithms.
         alg = new Algorithm(rawData[5]);
-        sideStickers[0] = buildSideStickers(rawData[1], Rotation.LEFT);
-        sideStickers[1] = buildSideStickers(rawData[2], Rotation.FRONT);
-        sideStickers[2] = buildSideStickers(rawData[3], Rotation.RIGHT);
-        sideStickers[3] = buildSideStickers(rawData[4], Rotation.BACK);
+        sideStickers[0] = buildSideStickers(rawData[1], Rotation.LEFT, false);
+        sideStickers[1] = buildSideStickers(rawData[2], Rotation.FRONT, false);
+        sideStickers[2] = buildSideStickers(rawData[3], Rotation.RIGHT, true);
+        sideStickers[3] = buildSideStickers(rawData[4], Rotation.BACK, true);
     }
 
-    private SideSticker[] buildSideStickers(String rawData, Rotation face) {
+    private SideSticker[] buildSideStickers(String rawData, Rotation face, boolean reversed) {
         SideSticker[] sideStickers;
         int xOffset = 0;
         int yOffset = 0;
         if (face == Rotation.RIGHT) xOffset = sideStickerXOffset + 3 * sideStickerWidth;
         if (face == Rotation.FRONT) yOffset = sideStickerYOffset + 3 * sideStickerHeight;
         switch (face) {
-            case LEFT, RIGHT -> sideStickers = new SideSticker[] {
+            case LEFT -> sideStickers = new SideSticker[] {
                     new SideSticker(xOffset, sideStickerYOffset, stringToAWTColor(rawData.charAt(0)), true),
                     new SideSticker(xOffset, sideStickerYOffset + sideStickerHeight, stringToAWTColor(rawData.charAt(1)), true),
                     new SideSticker(xOffset, sideStickerYOffset + 2 * sideStickerHeight, stringToAWTColor(rawData.charAt(2)), true),
             };
-            case FRONT, BACK -> sideStickers = new SideSticker[] {
+            case RIGHT -> sideStickers = new SideSticker[] {
+                    new SideSticker(xOffset, sideStickerYOffset + 2 * sideStickerHeight, stringToAWTColor(rawData.charAt(0)), true),
+                    new SideSticker(xOffset, sideStickerYOffset + sideStickerHeight, stringToAWTColor(rawData.charAt(1)), true),
+                    new SideSticker(xOffset, sideStickerYOffset, stringToAWTColor(rawData.charAt(2)), true),
+            };
+            case FRONT -> sideStickers = new SideSticker[] {
                     new SideSticker(sideStickerXOffset, yOffset, stringToAWTColor(rawData.charAt(0)), false),
                     new SideSticker(sideStickerXOffset + sideStickerWidth, yOffset, stringToAWTColor(rawData.charAt(1)), false),
                     new SideSticker(sideStickerXOffset + 2 * sideStickerWidth, yOffset, stringToAWTColor(rawData.charAt(2)), false),
+            };
+            case BACK -> sideStickers = new SideSticker[] {
+                    new SideSticker(sideStickerXOffset + 2 * sideStickerWidth, yOffset, stringToAWTColor(rawData.charAt(0)), false),
+                    new SideSticker(sideStickerXOffset + sideStickerWidth, yOffset, stringToAWTColor(rawData.charAt(1)), false),
+                    new SideSticker(sideStickerXOffset, yOffset, stringToAWTColor(rawData.charAt(2)), false),
             };
             default -> throw new IllegalArgumentException("Invalid face: " + face);
         }
@@ -67,6 +78,10 @@ public class SolvingAlgorithm extends Face {
                 sticker.paintComponent(graphics);
             }
         }
+    }
+
+    public String toString() {
+        return this.alg.toString();
     }
 
     private Color[] getColorsFromRawData(String face) {

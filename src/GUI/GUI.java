@@ -192,10 +192,18 @@ public class GUI extends JFrame implements ActionListener {
                     drawCube();
                 }
             }
-            case "Algorithms" -> new AlgsMenu();
+            case "Algorithms" -> new AlgsMenu(this);
         }
     }
 
+    public void execute(Algorithm alg) {
+        alg.execute(cube);
+        drawCube();
+    }
+
+    /**
+     * Draws the cube.
+     */
     public void drawCube() {
         HashMap<String, Piece> upLayer = getYLayer(Rotation.UP);
         HashMap<String, Piece> equatorLayer = getYLayer(Rotation.EQUATOR);
@@ -330,7 +338,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Used for the GUI. Gets a hashmap representing a yLayer.
+     * Used for the GUI. Gets a HashMap representing a yLayer.
      * @param layer Up/Equator/Down
      * @return The yLayer
      */

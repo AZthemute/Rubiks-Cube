@@ -8,11 +8,38 @@ package types;
 public enum Rotation implements MoveOnCube {
     BACK, RIGHT, FRONT, LEFT, UP, DOWN, MIDDLE, EQUATOR, STANDING;
 
+    @Override
+    public char toChar() {
+        char c;
+        switch (this) {
+            case BACK -> c = 'B';
+            case RIGHT -> c = 'R';
+            case FRONT -> c = 'F';
+            case LEFT -> c = 'L';
+            case UP -> c = 'U';
+            case DOWN -> c = 'D';
+            default -> throw new IllegalStateException("Unexpected value: " + this);
+        }
+        return c;
+    }
+
     /**
      * Full cube rotations. These are only to be used as move notation when
      * rotating the full cube.
      */
     public enum CubeRotation implements MoveOnCube {
-        X, Y, Z
+        X, Y, Z;
+
+        @Override
+        public char toChar() {
+            char c;
+            switch (this) {
+                case X -> c = 'x';
+                case Y -> c = 'y';
+                case Z -> c = 'z';
+                default -> throw new IllegalStateException("Unexpected value: " + this);
+            }
+            return c;
+        }
     }
 }

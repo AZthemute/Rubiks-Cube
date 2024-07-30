@@ -90,24 +90,7 @@ public class Algorithm {
     public String toCubeDB() {
         StringBuilder alg = new StringBuilder();
         for (Move<MoveOnCube> move : moves) {
-            switch (move.type) {
-                case Rotation.BACK -> alg.append('B');
-                case Rotation.RIGHT -> alg.append('R');
-                case Rotation.FRONT -> alg.append('F');
-                case Rotation.LEFT -> alg.append('L');
-                case Rotation.UP -> alg.append('U');
-                case Rotation.DOWN -> alg.append('D');
-                case Rotation.MIDDLE -> alg.append('M');
-                case Rotation.EQUATOR -> alg.append('E');
-                case Rotation.STANDING -> alg.append('S');
-                case Rotation.CubeRotation.X -> alg.append('x');
-                case Rotation.CubeRotation.Y -> alg.append('y');
-                case Rotation.CubeRotation.Z -> alg.append('z');
-                default -> throw new IllegalStateException("Unexpected value: " + move.type);
-            }
-
-            if (move.isDouble) alg.append('2');
-            if (move.isPrime) alg.append('-');
+            alg.append(move.toString());
             alg.append('_');
         }
         return alg.toString();
@@ -119,27 +102,21 @@ public class Algorithm {
     public String toString() {
         StringBuilder alg = new StringBuilder();
         for (Move<MoveOnCube> move : moves) {
-            switch (move.type) {
-                case Rotation.BACK -> alg.append('B');
-                case Rotation.RIGHT -> alg.append('R');
-                case Rotation.FRONT -> alg.append('F');
-                case Rotation.LEFT -> alg.append('L');
-                case Rotation.UP -> alg.append('U');
-                case Rotation.DOWN -> alg.append('D');
-                case Rotation.MIDDLE -> alg.append('M');
-                case Rotation.EQUATOR -> alg.append('E');
-                case Rotation.STANDING -> alg.append('S');
-                case Rotation.CubeRotation.X -> alg.append('x');
-                case Rotation.CubeRotation.Y -> alg.append('y');
-                case Rotation.CubeRotation.Z -> alg.append('z');
-                default -> throw new IllegalStateException("Unexpected value: " + move.type);
-            }
-
-            if (move.isDouble) alg.append('2');
-            if (move.isPrime) alg.append('\'');
+            alg.append(move.toString());
             alg.append(' ');
         }
-        return alg.toString();
+        return alg.substring(0, alg.length() - 1); // Strips off the last space
+    }
+
+    /**
+     * @return The reverse of this Algorithm.
+     */
+    public Algorithm getReverse() {
+        StringBuilder algString = new StringBuilder();
+        for (Move<MoveOnCube> move : moves.reversed()) {
+            algString.append(move.reverse().toString()).append(' ');
+        }
+        return new Algorithm(algString.toString());
     }
 
     /**
@@ -153,6 +130,54 @@ public class Algorithm {
             if ((type == Rotation.RIGHT) || (type == Rotation.BACK) || (type == Rotation.UP)) {return !isPrime;}
             return isPrime;
         }
+
+        /**
+         * @return The representation of this move as a string.
+         */
+        public String toString() {
+            StringBuilder s = new StringBuilder();
+
+            if (isWide) s.append(Character.toLowerCase(this.type.toChar()));
+            else s.append(this.type.toChar());
+
+            if (isDouble) s.append('2');
+            if (isPrime) s.append('\'');
+            return s.toString();
+        }
+
+        /**
+         * Helper for getReverse() on Algorithm.
+         * @return A new Move with the isPrime variable reversed.
+         */
+        public Move<MoveOnCube> reverse() {
+            return new Move<>(this.type, !this.isPrime, this.isDouble, this.isWide);
+        }
+    }
+
+    /**
+     * Not in the Move class because stupid blah blah needs to be of type T
+     * switch cases suck
+     * @param m
+     * @return
+     */
+    public char toChar(Move m) {
+        char c;
+        switch (m.type) {
+            case Rotation.BACK -> c = 'B';
+            case Rotation.RIGHT -> c = 'R';
+            case Rotation.FRONT -> c = 'F';
+            case Rotation.LEFT -> c = 'L';
+            case Rotation.UP -> c = 'U';
+            case Rotation.DOWN -> c = 'D';
+            case Rotation.MIDDLE -> c = 'M';
+            case Rotation.EQUATOR -> c = 'E';
+            case Rotation.STANDING -> c = 'S';
+            case Rotation.CubeRotation.X -> c = 'x';
+            case Rotation.CubeRotation.Y -> c = 'y';
+            case Rotation.CubeRotation.Z -> c = 'z';
+            default -> throw new IllegalStateException("Unexpected value: " + m.type);
+        }
+        return c;
     }
 
     /**
