@@ -126,33 +126,7 @@ public class GUI extends JFrame implements ActionListener {
                     );
                     return;
                 }
-
-                Algorithm thisMoves;
-                String oldMovesString = movesString;
-                try {
-                    thisMoves = new Algorithm(algInput.getText());
-                    // Set the initial scramble if not done
-                    if (scramble == null) scramble = thisMoves;
-
-                    movesString += algInput.getText() + " ";
-                    moves = new Algorithm(movesString);
-                    /*
-                    System.out.println(movesString);
-                    System.out.println(moves.toCubeDB());
-                    System.out.println(thisMoves.toCubeDB());
-                    System.out.println(scramble.toCubeDB());
-                     */
-                }
-                catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
-                    JOptionPane.showMessageDialog(this,
-                            "Error in moves: " + except.getMessage(),
-                            "Invalid moves", JOptionPane.ERROR_MESSAGE
-                    );
-                    movesString = oldMovesString;
-                    return;
-                }
-                thisMoves.execute(cube);
-                drawCube();
+                this.execute(new Algorithm(algInput.getText()));
             }
             case "Solve" -> {
                 Algorithm solveAlg = cube.solve(solveChoicesBox.getSelectedItem().toString());
@@ -197,6 +171,27 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void execute(Algorithm alg) {
+        String oldMovesString = movesString;
+        try {
+            if (scramble == null) scramble = alg;
+
+            movesString += alg.toString() + " ";
+            moves = new Algorithm(movesString);
+                    /*
+                    System.out.println(movesString);
+                    System.out.println(moves.toCubeDB());
+                    System.out.println(thisMoves.toCubeDB());
+                    System.out.println(scramble.toCubeDB());
+                     */
+        }
+        catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
+            JOptionPane.showMessageDialog(this,
+                    "Error in moves: " + except.getMessage(),
+                    "Invalid moves", JOptionPane.ERROR_MESSAGE
+            );
+            movesString = oldMovesString;
+            return;
+        }
         alg.execute(cube);
         drawCube();
     }
