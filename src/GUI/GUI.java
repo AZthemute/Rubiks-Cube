@@ -27,11 +27,10 @@ public class GUI extends JFrame implements ActionListener {
     private Algorithm moves = null;
 
     // GUI components
-    private JTextField algInput;
-    private JLabel instructionText;
-    private JComboBox<String> solveChoicesBox, exportChoicesBox;
-    private JButton solveButton, exportButton, resetButton, buttonShowCube, algsMenuButton;
-    private Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
+    private final JTextField algInput;
+    private final JComboBox<String> exportChoicesBox, algsMenuChoicesBox;
+    private final JButton exportButton, resetButton, executeButton, algsMenuButton;
+    private final Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
     // The offsets are based around the front face
     // slightly bigger than the actual face sizes to account for SolvingAlgorithm
@@ -50,47 +49,42 @@ public class GUI extends JFrame implements ActionListener {
         setLayout(null);
         setVisible(true);
 
-        buttonShowCube = new JButton("Execute");
-        buttonShowCube.setBounds(850,20,120,40);
-        buttonShowCube.addActionListener(this);
-        add(buttonShowCube);
+        executeButton = new JButton("Execute");
+        executeButton.setBounds(850,20,120,40);
+        executeButton.addActionListener(this);
+        add(executeButton);
 
         algInput = new JTextField("");
         algInput.setBounds(120,20,720,40);
         algInput.addActionListener(this);
         add(algInput);
 
-        instructionText = new JLabel("Enter moves...");
+        JLabel instructionText = new JLabel("Enter moves...");
         instructionText.setBounds(20, 20, 100, 40);
         add(instructionText);
 
-        String[] solveChoices = {"Cross", "Winter Variation", "COLL"};
-        solveChoicesBox = new JComboBox<>(solveChoices);
-        solveChoicesBox.setBounds(20, 600, 150, 40);
-        add(solveChoicesBox);
-
-        String[] exportChoices = {"Export only the scramble", "Export all moves done", "Export only the solution"};
+        String[] exportChoices = {"Export only the scramble", "Export all moves done"};
         exportChoicesBox = new JComboBox<>(exportChoices);
-        exportChoicesBox.setBounds(20, 650, 310, 40);
+        exportChoicesBox.setBounds(20, 620, 200, 40);
         add(exportChoicesBox);
 
-        solveButton = new JButton("Solve");
-        solveButton.setBounds(180, 600, 150, 40);
-        solveButton.addActionListener(this);
-        add(solveButton);
+        String[] algsMenuChoices = {"Winter Variation", "COLL"};
+        algsMenuChoicesBox = new JComboBox<>(algsMenuChoices);
+        algsMenuChoicesBox.setBounds(20, 570, 200, 40);
+        add(algsMenuChoicesBox);
 
         exportButton = new JButton("Export to CubeDB");
-        exportButton.setBounds(340, 650, 200, 40);
+        exportButton.setBounds(230, 620, 200, 40);
         exportButton.addActionListener(this);
         add(exportButton);
 
         resetButton = new JButton("Reset cube to solved state");
-        resetButton.setBounds(340, 600, 200, 40);
+        resetButton.setBounds(440, 620, 200, 40);
         resetButton.addActionListener(this);
         add(resetButton);
 
         algsMenuButton = new JButton("Algorithms");
-        algsMenuButton.setBounds(20, 550, 200, 40);
+        algsMenuButton.setBounds(230, 570, 200, 40);
         algsMenuButton.addActionListener(this);
         add(algsMenuButton);
 
@@ -126,10 +120,15 @@ public class GUI extends JFrame implements ActionListener {
                     );
                     return;
                 }
-                this.execute(new Algorithm(algInput.getText()));
-            }
-            case "Solve" -> {
-                Algorithm solveAlg = cube.solve(solveChoicesBox.getSelectedItem().toString());
+                try {
+                    this.execute(new Algorithm(algInput.getText()));
+                }
+                catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
+                    JOptionPane.showMessageDialog(this,
+                            "Error in moves: " + except.getMessage(),
+                            "Invalid moves", JOptionPane.ERROR_MESSAGE
+                    );
+                }
             }
             case "Export to CubeDB" -> {
                 Runtime rt = Runtime.getRuntime();
@@ -137,7 +136,6 @@ public class GUI extends JFrame implements ActionListener {
                 switch (exportChoicesBox.getSelectedItem().toString()) {
                     case "Export only the scramble" -> alg = scramble;
                     case "Export all moves done" -> alg = moves;
-                    case "Export only the solution" -> alg = scramble; // todo
                     default -> throw new IllegalArgumentException("Export choice was invalid");
                 }
                 try {
@@ -166,7 +164,7 @@ public class GUI extends JFrame implements ActionListener {
                     drawCube();
                 }
             }
-            case "Algorithms" -> new AlgsMenu(this);
+            case "Algorithms" -> new AlgsMenu(algsMenuChoicesBox.getSelectedItem().toString(), this);
         }
     }
 

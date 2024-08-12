@@ -15,16 +15,21 @@ public class AlgsMenu extends JFrame implements ActionListener {
     /**
      * @param originalGuiReference The GUI that created this menu.
      */
-    public AlgsMenu(GUI originalGuiReference) {
+    public AlgsMenu(String type, GUI originalGuiReference) {
         this.originalGuiReference = originalGuiReference;
-        setTitle("Algorithms");
+        setTitle(type + " Algorithms");
         setSize(600, 800);
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        ArrayList<String[]> algs = FileHandler.readIntoTSV("wv.tsv");
+        String filename = switch (type) {
+            case "Winter Variation" -> "wv.tsv";
+            case "COLL" -> "coll.tsv";
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
+        ArrayList<String[]> algs = FileHandler.readIntoTSV(filename);
         for (String[] alg : algs) {
             SolvingAlgorithm face = new SolvingAlgorithm(alg);
             mainPanel.add(createSection(face));
@@ -34,10 +39,7 @@ public class AlgsMenu extends JFrame implements ActionListener {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         // Set the initial scroll position to the top
-        SwingUtilities.invokeLater(() -> {
-            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMinimum());
-        });
-
+        SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMinimum()));
         add(scrollPane);
 
         setVisible(true);

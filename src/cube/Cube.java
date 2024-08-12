@@ -298,20 +298,19 @@ public class Cube {
 
     /**
      * Simulates one R move. This is a helper method for the move() method.
-     * @return The cube.
      */
-    public Cube moveR() {
+    public void moveR() {
         layers.get(Rotation.RIGHT).moveR(false);
-        return this;
     }
 
     /**
      * Simulate a move on the whole cube.
-     * @param move The type of move, except rotations (this has an overloaded method).
-     * @param isPrime If the move is prime or not.
+     *
+     * @param move     The type of move, except rotations (this has an overloaded method).
+     * @param isPrime  If the move is prime or not.
      * @param isDouble If the move is double or not.
      */
-    public Cube move(Rotation move, boolean isPrime, boolean isDouble) {
+    public void move(Rotation move, boolean isPrime, boolean isDouble) {
         if (isDouble) {
             move(move, false, false);
         }
@@ -362,16 +361,16 @@ public class Cube {
                 move(Rotation.CubeRotation.Z, false, false);
             }
         }
-        return this;
     }
 
     /**
      * Rotate the entire cube.
-     * @param move X/Y/Z
-     * @param isPrime If the move is prime or not.
+     *
+     * @param move     X/Y/Z
+     * @param isPrime  If the move is prime or not.
      * @param isDouble If the move is double or not.
      */
-    public Cube move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
+    public void move(Rotation.CubeRotation move, boolean isPrime, boolean isDouble) {
         if (isDouble) {
             move(move, false, false);
         }
@@ -423,30 +422,6 @@ public class Cube {
                 }
             }
         }
-        return this;
-    }
-
-    public Algorithm solve(String type) {
-        Algorithm solveAlg = new Algorithm(""); // Defined with something to stop compiler errors for testing
-        switch (type) {
-            case "Cross" -> {
-                // I would implement the cstimer algorithm, but that's very complex.
-                Piece USB = getPiece(Rotation.UP, Rotation.STANDING, Rotation.BACK);
-                Color upColor = USB.getColors().get(Rotation.UP);
-                // Check for solved cross pieces
-            }
-            case "Winter Variation" -> {
-                System.out.println("Solving WV");
-                // Read list of algs from file
-            }
-            case "COLL" -> {
-                System.out.println("Solving COLL");
-            }
-            default -> {
-                throw new IllegalArgumentException("Solution type was invalid");
-            }
-        }
-        return solveAlg;
     }
 
     public void display() {
