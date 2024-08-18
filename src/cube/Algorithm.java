@@ -13,8 +13,8 @@ public class Algorithm {
     private ArrayList<Move<MoveOnCube>> moves = new ArrayList<>();
 
     /**
-     * Construct a new Algorithm. This currently does not support wide
-     * notation, such as r or 2R. Additionally, R2' is treated as R2 since
+     * Construct a new Algorithm. This currently does not support the 2R notation.
+     * Additionally, R2' is treated as R2 since
      * these result in the same thing when executed.
      * @param alg The algorithm, e.g. R' L2 D U' B2 U2
      */
