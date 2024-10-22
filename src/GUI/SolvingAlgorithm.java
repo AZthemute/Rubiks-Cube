@@ -5,7 +5,6 @@ import types.Color;
 import types.Rotation;
 
 import java.awt.*;
-import java.util.Collections;
 
 public class SolvingAlgorithm extends Face {
     private Algorithm alg;

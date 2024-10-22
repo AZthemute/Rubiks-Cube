@@ -75,7 +75,7 @@ public class GUI extends JFrame implements ActionListener {
         exportChoicesBox.setBounds(20, 620, 200, 40);
         add(exportChoicesBox);
 
-        String[] algsMenuChoices = {"Winter Variation", "COLL"};
+        String[] algsMenuChoices = {"Winter Variation", "COLL", "Custom"};
         algsMenuChoicesBox = new JComboBox<>(algsMenuChoices);
         algsMenuChoicesBox.setBounds(20, 570, 200, 40);
         add(algsMenuChoicesBox);

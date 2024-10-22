@@ -11,7 +11,7 @@ import javax.swing.text.*;
 
 public class AlgsMenu extends JFrame implements ActionListener {
     private final GUI originalGuiReference;
-    public final String dataDir = "./data/";
+    public final String dataDir = "data/";
 
     /**
      * @param originalGuiReference The GUI that created this menu.
@@ -28,9 +28,19 @@ public class AlgsMenu extends JFrame implements ActionListener {
         String filename = switch (type) {
             case "Winter Variation" -> dataDir + "wv.tsv";
             case "COLL" -> dataDir + "coll.tsv";
+            case "Custom" -> dataDir + "custom.tsv";
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
+
         ArrayList<String[]> algs = FileHandler.readIntoTSV(filename);
+        if (algs.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "The file " + filename + " is empty or cannot be read.",
+                    "Cannot read algorithms", JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
         for (String[] alg : algs) {
             SolvingAlgorithm face = new SolvingAlgorithm(alg);
             mainPanel.add(createSection(face));

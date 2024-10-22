@@ -1,0 +1,9 @@
+// Create your own algorithms here!
+// Lines beginning with // are ignored.
+// The format of an algorithm is the following:
+// Up, Left, Front, Right, Back, Algorithm
+// The up face is a CSV string that can be read as a 2D array representing the colours on that face.
+// The other faces are read anti-clockwise.
+// Example algorithms below:
+NNN,NNN,NNN	NNN	NNN	NNN	NNN	R R' U U'
+GYG,WWW,BYB	YNY	ONR	YNY	RNO	R U R' U R U' R' U R U2 R'
