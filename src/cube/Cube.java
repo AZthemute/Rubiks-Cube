@@ -27,12 +27,12 @@ public class Cube {
 
     private class xLayer {
         HashMap<Rotation, yLayer> layers;
-        Rotation xCoordinate;
+        private final Rotation xCoordinate;
 
         /**
          * Automatic constructor that fills in the pieces based
          * on the white front, green up position.
-         * @param xCoordinate
+         * @param xCoordinate Left/Middle/Right
          */
         public xLayer(Rotation xCoordinate) {
             this.xCoordinate = xCoordinate;
@@ -130,8 +130,9 @@ public class Cube {
         }
 
         /**
-         * Up, Equator, Down
-         * @param layers
+         * Create an xLayer from existing yLayers.
+         * @param xCoordinate Left/Middle/Right
+         * @param layers The existing yLayer HashMap
          */
         public xLayer(Rotation xCoordinate, HashMap<Rotation, yLayer> layers) {
             this.xCoordinate = xCoordinate;
@@ -159,9 +160,7 @@ public class Cube {
         public void moveR(boolean isPrime) {
             // Hashmap of temp pieces to avoid a lot of declarations
             HashMap<String, Piece> tempPieces = new HashMap<>();
-            // todo: double Z rotation if prime (could be on entire cube)
             if (this.xCoordinate == Rotation.MIDDLE) {
-                // todo: move the pieces properly (they just need different instantiation)
                 tempPieces.put("UFx", new EdgePiece((EdgePiece) getPiece(Rotation.UP, Rotation.FRONT, this.xCoordinate)));
                 tempPieces.put("UBx", new EdgePiece((EdgePiece) getPiece(Rotation.UP, Rotation.BACK, this.xCoordinate)));
                 tempPieces.put("DBx", new EdgePiece((EdgePiece) getPiece(Rotation.DOWN, Rotation.BACK, this.xCoordinate)));

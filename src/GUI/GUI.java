@@ -16,15 +16,22 @@ public class GUI extends JFrame implements ActionListener {
     private Cube cube;
 
     /**
-     * The first set of moves provided.
+     * The first set of moves done.
      */
     private Algorithm scramble = null;
 
+
     /**
-     * All moves provided after the first set
+     * All moves done after the first set.
      */
     private String movesString = "";
     private Algorithm moves = null;
+
+
+    /**
+     * The last set of moves done.
+     */
+    private Algorithm lastMoves = new Algorithm("");
 
     // GUI components
     private final JTextField algInput;
@@ -169,29 +176,34 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void execute(Algorithm alg) {
-        String oldMovesString = movesString;
         try {
-            if (scramble == null) scramble = alg;
-
-            movesString += alg.toString() + " ";
-            moves = new Algorithm(movesString);
-                    /*
-                    System.out.println(movesString);
-                    System.out.println(moves.toCubeDB());
-                    System.out.println(thisMoves.toCubeDB());
-                    System.out.println(scramble.toCubeDB());
-                     */
+            System.out.println(lastMoves);
+        } catch (Exception ignored) {}
+        Algorithm reverse = alg.reverse();
+        if (lastMoves.equals(reverse)) {
+            StringBuilder test = new StringBuilder(moves.toString());
+            test.delete(-reverse.toString().length() - 1, reverse.toString().length());
+            moves = new Algorithm(test.toString());
         }
-        catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
-            JOptionPane.showMessageDialog(this,
-                    "Error in moves: " + except.getMessage(),
-                    "Invalid moves", JOptionPane.ERROR_MESSAGE
-            );
-            movesString = oldMovesString;
-            return;
+        else {
+            String oldMovesString = movesString;
+            try {
+                if (scramble == null) scramble = alg;
+                movesString += alg + " ";
+                moves = new Algorithm(movesString);
+            }
+            catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
+                JOptionPane.showMessageDialog(this,
+                        "Error in moves: " + except.getMessage(),
+                        "Invalid moves", JOptionPane.ERROR_MESSAGE
+                );
+                movesString = oldMovesString;
+                return;
+            }
         }
         alg.execute(cube);
         drawCube();
+        lastMoves = alg.reverse();
     }
 
     /**

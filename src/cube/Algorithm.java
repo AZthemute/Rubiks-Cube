@@ -13,7 +13,8 @@ public class Algorithm {
     private ArrayList<Move<MoveOnCube>> moves = new ArrayList<>();
 
     /**
-     * Construct a new Algorithm. This currently does not support the 2R notation.
+     * Construct a new Algorithm. This currently does not support the 2R notation,
+     * but that is not useful for 3x3, so it may never be supported.
      * Additionally, R2' is treated as R2 since
      * these result in the same thing when executed.
      * @param alg The algorithm, e.g. R' L2 D U' B2 U2
@@ -30,8 +31,8 @@ public class Algorithm {
             boolean isDouble = false;
             boolean isWide = false;
 
-            // Choose the correct move type. The character is forced to uppercase
-            // in order to easily support wide moves.
+            // Choose the correct move type. The character is forced
+            // to uppercase in order to easily support wide moves.
             switch (Character.toUpperCase(move.charAt(0))) {
                 case 'U' -> moveType = Rotation.UP;
                 case 'E' -> moveType = Rotation.EQUATOR;
@@ -64,7 +65,6 @@ public class Algorithm {
                 else throw createIllegalMoveException(move);
             }
 
-            // todo: treat R2' as R2, R3 = R', etc
             moves.add(new Move<>(moveType, isPrime, isDouble, isWide));
         }
     }
@@ -74,7 +74,6 @@ public class Algorithm {
      * @param cube The cube to execute the algorithm on.
      */
     public void execute(Cube cube) {
-        // todo: parse moves array and call Cube functions based on what is parsed
         for (Move<MoveOnCube> move : moves) {
             if (move.type.getClass() == Rotation.class) {
                 cube.move((Rotation) move.type, move.isPrime, move.isDouble);
@@ -111,10 +110,10 @@ public class Algorithm {
     /**
      * @return The reverse of this Algorithm.
      */
-    public Algorithm getReverse() {
+    public Algorithm reverse() {
         StringBuilder algString = new StringBuilder();
         for (Move<MoveOnCube> move : moves.reversed()) {
-            algString.append(move.reverse().toString()).append(' ');
+            algString.append(move.reverse()).append(' ');
         }
         return new Algorithm(algString.toString());
     }
@@ -128,7 +127,7 @@ public class Algorithm {
          */
         public boolean isPrimeForWide() {
             if ((type == Rotation.RIGHT) || (type == Rotation.BACK) || (type == Rotation.UP)) {return !isPrime;}
-            return isPrime;
+            else return isPrime;
         }
 
         /**
@@ -152,32 +151,6 @@ public class Algorithm {
         public Move<MoveOnCube> reverse() {
             return new Move<>(this.type, !this.isPrime, this.isDouble, this.isWide);
         }
-    }
-
-    /**
-     * Not in the Move class because stupid blah blah needs to be of type T
-     * switch cases suck
-     * @param m
-     * @return
-     */
-    public char toChar(Move m) {
-        char c;
-        switch (m.type) {
-            case Rotation.BACK -> c = 'B';
-            case Rotation.RIGHT -> c = 'R';
-            case Rotation.FRONT -> c = 'F';
-            case Rotation.LEFT -> c = 'L';
-            case Rotation.UP -> c = 'U';
-            case Rotation.DOWN -> c = 'D';
-            case Rotation.MIDDLE -> c = 'M';
-            case Rotation.EQUATOR -> c = 'E';
-            case Rotation.STANDING -> c = 'S';
-            case Rotation.CubeRotation.X -> c = 'x';
-            case Rotation.CubeRotation.Y -> c = 'y';
-            case Rotation.CubeRotation.Z -> c = 'z';
-            default -> throw new IllegalStateException("Unexpected value: " + m.type);
-        }
-        return c;
     }
 
     /**

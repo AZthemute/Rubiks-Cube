@@ -8,15 +8,14 @@ import java.awt.*;
 import java.util.Collections;
 
 public class SolvingAlgorithm extends Face {
-    Algorithm alg;
-    SideSticker[][] sideStickers = new SideSticker[4][3];
+    private Algorithm alg;
+    private SideSticker[][] sideStickers = new SideSticker[4][3];
 
     static final int sideStickerXOffset = 20;
     static final int sideStickerYOffset = 20;
     static final int sideStickerWidth = 50;
     static final int sideStickerHeight = 50;
 
-    // todo: the custom CSV format with the faces
     public SolvingAlgorithm(String[] rawData) {
         String[] upFaceString = rawData[0].split(",");
         this.setStickers(new Color[][] {
@@ -26,13 +25,13 @@ public class SolvingAlgorithm extends Face {
         }, true);
         // In the future, I may allow reading in multiple algorithms.
         alg = new Algorithm(rawData[5]);
-        sideStickers[0] = buildSideStickers(rawData[1], Rotation.LEFT, false);
-        sideStickers[1] = buildSideStickers(rawData[2], Rotation.FRONT, false);
-        sideStickers[2] = buildSideStickers(rawData[3], Rotation.RIGHT, true);
-        sideStickers[3] = buildSideStickers(rawData[4], Rotation.BACK, true);
+        sideStickers[0] = buildSideStickers(rawData[1], Rotation.LEFT);
+        sideStickers[1] = buildSideStickers(rawData[2], Rotation.FRONT);
+        sideStickers[2] = buildSideStickers(rawData[3], Rotation.RIGHT);
+        sideStickers[3] = buildSideStickers(rawData[4], Rotation.BACK);
     }
 
-    private SideSticker[] buildSideStickers(String rawData, Rotation face, boolean reversed) {
+    private SideSticker[] buildSideStickers(String rawData, Rotation face) {
         SideSticker[] sideStickers;
         int xOffset = 0;
         int yOffset = 0;
@@ -117,5 +116,9 @@ public class SolvingAlgorithm extends Face {
             case 'N' -> java.awt.Color.GRAY; // No sticker exists
             default -> throw new IllegalStateException("Unexpected color: " + s);
         };
+    }
+
+    public Algorithm alg() {
+        return this.alg;
     }
 }

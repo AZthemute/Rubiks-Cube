@@ -11,6 +11,7 @@ import javax.swing.text.*;
 
 public class AlgsMenu extends JFrame implements ActionListener {
     private final GUI originalGuiReference;
+    public final String dataDir = "./data/";
 
     /**
      * @param originalGuiReference The GUI that created this menu.
@@ -25,8 +26,8 @@ public class AlgsMenu extends JFrame implements ActionListener {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         String filename = switch (type) {
-            case "Winter Variation" -> "wv.tsv";
-            case "COLL" -> "coll.tsv";
+            case "Winter Variation" -> dataDir + "wv.tsv";
+            case "COLL" -> dataDir + "coll.tsv";
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
         ArrayList<String[]> algs = FileHandler.readIntoTSV(filename);
@@ -85,12 +86,12 @@ public class AlgsMenu extends JFrame implements ActionListener {
         // back to simple stuff
         JButton reverseButton = new JButton("Reverse");
         reverseButton.addActionListener(AlgsMenu.this);
-        reverseButton.putClientProperty("alg", algorithm.alg);
+        reverseButton.putClientProperty("alg", algorithm.alg());
         reverseButton.setBounds(380, 90, 90, 30);
 
         JButton executeButton = new JButton("Execute");
         executeButton.addActionListener(AlgsMenu.this);
-        executeButton.putClientProperty("alg", algorithm.alg);
+        executeButton.putClientProperty("alg", algorithm.alg());
         executeButton.setBounds(470, 90, 90, 30);
 
         panel.add(algorithm);
@@ -107,6 +108,6 @@ public class AlgsMenu extends JFrame implements ActionListener {
         Algorithm alg = (Algorithm) button.getClientProperty("alg");
 
         if (e.getActionCommand().equals("Execute")) originalGuiReference.execute(alg);
-        else if (e.getActionCommand().equals("Reverse")) originalGuiReference.execute(alg.getReverse());
+        else if (e.getActionCommand().equals("Reverse")) originalGuiReference.execute(alg.reverse());
     }
 }

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BetterCube:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BetterCube_jar</output-path>
+    <root id="archive" name="BetterCube.jar">
+      <element id="module-output" name="BetterCube" />
+    </root>
+  </artifact>
+</component>

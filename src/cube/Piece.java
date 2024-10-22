@@ -32,16 +32,6 @@ public abstract class Piece {
         this.colors.putIfAbsent(Rotation.DOWN, null);
     }
 
-    public Piece(Color[] colors) {
-        this.colors = buildPieceColors(colors);
-        this.colors.putIfAbsent(Rotation.BACK, null);
-        this.colors.putIfAbsent(Rotation.RIGHT, null);
-        this.colors.putIfAbsent(Rotation.FRONT, null);
-        this.colors.putIfAbsent(Rotation.LEFT, null);
-        this.colors.putIfAbsent(Rotation.UP, null);
-        this.colors.putIfAbsent(Rotation.DOWN, null);
-    }
-
     /**
      * Method to simulate a move in the R direction on a piece.
      * <p>
@@ -49,9 +39,7 @@ public abstract class Piece {
      * of the piece on the cube is tracked by the Cube object.
      */
     public void moveR(boolean isPrime) {
-        if (isPrime) {
-            move(Rotation.CubeRotation.Z, false, true);
-        }
+        if (isPrime) move(Rotation.CubeRotation.Z, false, true);
         // Copy the old colors into a new array for moving around later
         HashMap<Rotation, Color> oldColors = new HashMap<>(colors);
 
@@ -86,7 +74,7 @@ public abstract class Piece {
                         colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                         colors.put(Rotation.UP, oldColors.get(Rotation.FRONT));
                     }
-                    // Not M (I think)
+                    // Not M
                     else {
                         colors.put(Rotation.BACK, oldColors.get(Rotation.UP));
                     }
@@ -114,11 +102,6 @@ public abstract class Piece {
                 else if (oldColors.get(Rotation.BACK) != null) {
                     colors.put(Rotation.DOWN, oldColors.get(Rotation.BACK));
                 }
-
-                // These colours will always stay in the same place. If there is no colour
-                // for one of these, it will simply be null.
-                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
-                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CORNER -> {
                 // Top layer
@@ -145,11 +128,6 @@ public abstract class Piece {
                     }
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
-
-                // These colours will always stay in the same place. If there is no colour
-                // for one of these, it will simply be null.
-                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
-                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
             case CENTER -> {
                 if (oldColors.get(Rotation.FRONT) != null) {
@@ -164,11 +142,13 @@ public abstract class Piece {
                 else if (oldColors.get(Rotation.DOWN) != null) {
                     colors.put(Rotation.FRONT, oldColors.get(Rotation.DOWN));
                 }
-
-                colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
-                colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
             }
         }
+
+        // These colours will always stay in the same place. If there is no colour
+        // for one of these, it will simply be null.
+        colors.put(Rotation.LEFT, oldColors.get(Rotation.LEFT));
+        colors.put(Rotation.RIGHT, oldColors.get(Rotation.RIGHT));
     }
 
     /**
