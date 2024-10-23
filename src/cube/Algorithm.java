@@ -96,7 +96,7 @@ public class Algorithm {
             alg.append(move.toString());
             alg.append('_');
         }
-        return alg.toString();
+        return alg.substring(0, alg.length() - 1);
     }
 
     /**

@@ -183,9 +183,7 @@ public class GUI extends JFrame implements ActionListener {
             try {
                 if (scramble == null) scramble = alg;
                 if (moves == null || moves.getMoves().isEmpty()) moves = new Algorithm(alg.toString());
-                else {
-                    moves = new Algorithm(moves + " " + alg);
-                }
+                else moves = new Algorithm(moves + " " + alg);
             }
             catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
                 JOptionPane.showMessageDialog(this,

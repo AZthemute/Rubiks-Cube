@@ -18,6 +18,9 @@ public enum Rotation implements MoveOnCube {
             case LEFT -> c = 'L';
             case UP -> c = 'U';
             case DOWN -> c = 'D';
+            case MIDDLE -> c = 'M';
+            case EQUATOR -> c = 'E';
+            case STANDING -> c = 'S';
             default -> throw new IllegalStateException("Unexpected value: " + this);
         }
         return c;
