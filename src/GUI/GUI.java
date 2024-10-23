@@ -20,26 +20,22 @@ public class GUI extends JFrame implements ActionListener {
      */
     private Algorithm scramble = null;
 
-
     /**
      * All moves done after the first set.
      */
-    private String movesString = "";
     private Algorithm moves = null;
-
 
     /**
      * The last set of moves done.
      */
-    private Algorithm lastMoves = new Algorithm("");
+    private Algorithm lastMoves = null;
 
     // GUI components
     private final JTextField algInput;
     private final JComboBox<String> exportChoicesBox, algsMenuChoicesBox;
-    private final JButton exportButton, resetButton, executeButton, algsMenuButton;
     private final Face upFace, frontFace, leftFace, rightFace, backFace, downFace;
 
-    // The offsets are based around the front face
+    // The offsets are based around the front face being at 0,0
     // slightly bigger than the actual face sizes to account for SolvingAlgorithm
     private static final int faceXOffset = 160;
     private static final int faceYOffset = 160;
@@ -56,7 +52,7 @@ public class GUI extends JFrame implements ActionListener {
         setLayout(null);
         setVisible(true);
 
-        executeButton = new JButton("Execute");
+        JButton executeButton = new JButton("Execute");
         executeButton.setBounds(850,20,120,40);
         executeButton.addActionListener(this);
         add(executeButton);
@@ -80,24 +76,20 @@ public class GUI extends JFrame implements ActionListener {
         algsMenuChoicesBox.setBounds(20, 570, 200, 40);
         add(algsMenuChoicesBox);
 
-        exportButton = new JButton("Export to CubeDB");
+        JButton exportButton = new JButton("Export to CubeDB");
         exportButton.setBounds(230, 620, 200, 40);
         exportButton.addActionListener(this);
         add(exportButton);
 
-        resetButton = new JButton("Reset cube to solved state");
+        JButton resetButton = new JButton("Reset cube to solved state");
         resetButton.setBounds(440, 620, 200, 40);
         resetButton.addActionListener(this);
         add(resetButton);
 
-        algsMenuButton = new JButton("Algorithms");
+        JButton algsMenuButton = new JButton("Algorithms");
         algsMenuButton.setBounds(230, 570, 200, 40);
         algsMenuButton.addActionListener(this);
         add(algsMenuButton);
-
-        //SolvingAlgorithm test = new SolvingAlgorithm(new String[] {"YRG,BYW,GOY", "R U R'"});
-        //test.setBounds(800, 300, 240, 240);
-        //add(test);
 
         // Drawing the cube
         this.cube = cube;
@@ -166,7 +158,6 @@ public class GUI extends JFrame implements ActionListener {
                 if (toReset == JOptionPane.YES_OPTION) {
                     this.cube = new Cube();
                     this.scramble = null;
-                    this.movesString = "";
                     this.moves = null;
                     drawCube();
                 }
@@ -176,34 +167,37 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void execute(Algorithm alg) {
-        try {
-            System.out.println(lastMoves);
-        } catch (Exception ignored) {}
+        // Clean up moves when doing the reverse.
         Algorithm reverse = alg.reverse();
-        if (lastMoves.equals(reverse)) {
-            StringBuilder test = new StringBuilder(moves.toString());
-            test.delete(-reverse.toString().length() - 1, reverse.toString().length());
-            moves = new Algorithm(test.toString());
+
+        if (lastMoves != null && lastMoves.toString().equals(reverse.toString())) {
+            for (int i = 0; i < reverse.getMoves().size(); i++) {
+                moves.getMoves().remove(i + moves.getMoves().size() - 1);
+            }
+            // to avoid things like R R' R being flagged and completely removed
+            lastMoves = null;
         }
+
+        // Else, add it to moves.
         else {
-            String oldMovesString = movesString;
             try {
                 if (scramble == null) scramble = alg;
-                movesString += alg + " ";
-                moves = new Algorithm(movesString);
+                if (moves == null || moves.getMoves().isEmpty()) moves = new Algorithm(alg.toString());
+                else {
+                    moves = new Algorithm(moves + " " + alg);
+                }
             }
             catch (IllegalArgumentException | StringIndexOutOfBoundsException except) {
                 JOptionPane.showMessageDialog(this,
                         "Error in moves: " + except.getMessage(),
                         "Invalid moves", JOptionPane.ERROR_MESSAGE
                 );
-                movesString = oldMovesString;
                 return;
             }
+            lastMoves = alg;
         }
         alg.execute(cube);
         drawCube();
-        lastMoves = alg.reverse();
     }
 
     /**

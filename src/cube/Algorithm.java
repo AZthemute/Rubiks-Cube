@@ -69,6 +69,10 @@ public class Algorithm {
         }
     }
 
+    public ArrayList<Move<MoveOnCube>> getMoves() {
+        return moves;
+    }
+
     /**
      * Executes this algorithm on a cube.
      * @param cube The cube to execute the algorithm on.

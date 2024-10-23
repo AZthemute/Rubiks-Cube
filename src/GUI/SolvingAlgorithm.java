@@ -7,7 +7,7 @@ import types.Rotation;
 import java.awt.*;
 
 public class SolvingAlgorithm extends Face {
-    private Algorithm alg;
+    private final Algorithm alg;
     private SideSticker[][] sideStickers = new SideSticker[4][3];
 
     static final int sideStickerXOffset = 20;

@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.*;
-
 public class SideSticker extends Sticker {
     static final int LRwidth = 20;
     static final int LRheight = 50;
