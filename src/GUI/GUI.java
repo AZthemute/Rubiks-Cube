@@ -171,8 +171,10 @@ public class GUI extends JFrame implements ActionListener {
         Algorithm reverse = alg.reverse();
 
         if (lastMoves != null && lastMoves.toString().equals(reverse.toString())) {
-            for (int i = 0; i < reverse.getMoves().size(); i++) {
-                moves.getMoves().remove(i + moves.getMoves().size() - 1);
+            int initialSize = moves.getMoves().size();
+            System.out.println(initialSize);
+            for (int i = 0; i < reverse.getMoves().size() ; i++) {
+                moves.getMoves().remove(initialSize - i - 1);
             }
             // to avoid things like R R' R being flagged and completely removed
             lastMoves = null;
