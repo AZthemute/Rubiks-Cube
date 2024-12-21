@@ -52,6 +52,15 @@ public class Algorithm {
             // Check modifiers, if any
             if (Character.isLowerCase(move.charAt(0))) isWide = true;
 
+            if (isWide) {
+                switch (moveType) {
+                    case Rotation.EQUATOR, Rotation.STANDING, Rotation.MIDDLE,
+                            Rotation.CubeRotation.X, Rotation.CubeRotation.Y, Rotation.CubeRotation.Z
+                            -> throw createIllegalMoveException(move);
+                    default -> {}
+                }
+            }
+
             if (move.length() == 2) {
                 if (move.charAt(1) == '\'') isPrime = true;
                 else if (move.charAt(1) == '2') isDouble = true;
@@ -81,7 +90,7 @@ public class Algorithm {
         for (Move<MoveOnCube> move : moves) {
             if (move.type.getClass() == Rotation.class) {
                 cube.move((Rotation) move.type, move.isPrime, move.isDouble);
-                if (move.isWide) cube.move(Rotation.MIDDLE, move.isPrimeForWide(), move.isDouble);
+                if (move.isWide) cube.move(move.otherMoveForWide(), move.isPrimeForWide(), move.isDouble);
             }
             else cube.move((Rotation.CubeRotation) move.type, move.isPrime, move.isDouble);
         }
@@ -130,8 +139,18 @@ public class Algorithm {
          * Helper method for executing.
          */
         public boolean isPrimeForWide() {
-            if ((type == Rotation.RIGHT) || (type == Rotation.BACK) || (type == Rotation.UP)) {return !isPrime;}
+            if ((type == Rotation.RIGHT) || (type == Rotation.BACK) || (type == Rotation.UP)) return !isPrime;
             else return isPrime;
+        }
+
+        /**
+         * Helper method for executing.
+         */
+        public Rotation otherMoveForWide() {
+            if ((type == Rotation.LEFT) || (type == Rotation.RIGHT)) return Rotation.MIDDLE;
+            else if ((type == Rotation.UP) || (type == Rotation.DOWN)) return Rotation.EQUATOR;
+            // FRONT and BACK. The other Rotations are excluded from becoming Moves.
+            else return Rotation.STANDING;
         }
 
         /**
