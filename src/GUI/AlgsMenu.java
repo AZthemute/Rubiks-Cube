@@ -16,23 +16,18 @@ public class AlgsMenu extends JFrame implements ActionListener {
     /**
      * @param originalGuiReference The GUI that created this menu.
      */
-    public AlgsMenu(String type, GUI originalGuiReference) {
+    public AlgsMenu(String filename, GUI originalGuiReference) {
         this.originalGuiReference = originalGuiReference;
-        setTitle(type + " Algorithms");
+        setTitle(filename + " Algorithms");
         setSize(600, 800);
         setLocationRelativeTo(null);
+
+        filename += ".tsv";
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        String filename = switch (type) {
-            case "Winter Variation" -> dataDir + "wv.tsv";
-            case "COLL" -> dataDir + "coll.tsv";
-            case "Custom" -> dataDir + "custom.tsv";
-            default -> throw new IllegalStateException("Unexpected value: " + type);
-        };
-
-        ArrayList<String[]> algs = FileHandler.readIntoTSV(filename);
+        ArrayList<String[]> algs = FileHandler.readIntoTSV("data/" + filename);
         if (algs.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "The file " + filename + " is empty or cannot be read.",

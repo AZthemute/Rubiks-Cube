@@ -10,7 +10,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.io.File;
 
 public class GUI extends JFrame implements ActionListener {
     private Cube cube;
@@ -71,9 +74,33 @@ public class GUI extends JFrame implements ActionListener {
         exportChoicesBox.setBounds(20, 620, 200, 40);
         add(exportChoicesBox);
 
-        String[] algsMenuChoices = {"Winter Variation", "COLL", "Custom"};
-        algsMenuChoicesBox = new JComboBox<>(algsMenuChoices);
+        File dataPath = new File("data/");
+        File[] filesList = dataPath.listFiles();
+        String[] algs;
+        boolean dataFound = true;
+
+        if ((filesList == null) || filesList.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "The data folder cannot be found, cannot be read, or is empty.",
+                    "Cannot read algorithms", JOptionPane.ERROR_MESSAGE
+            );
+            algs = new String[]{"No algorithm data found"};
+            dataFound = false;
+        }
+        else {
+            ArrayList<String> algsMenuChoices = new ArrayList<>();
+            for (File file: filesList) {
+                if ((file.isFile()) && (file.getName().endsWith(".tsv"))) {
+                    System.out.println("Found data file: " + file.getName());
+                    algsMenuChoices.add(file.getName().substring(0, file.getName().length() - 4));
+                }
+            }
+            algs = algsMenuChoices.toArray(new String[0]);
+        }
+
+        algsMenuChoicesBox = new JComboBox<>(algs);
         algsMenuChoicesBox.setBounds(20, 570, 200, 40);
+        algsMenuChoicesBox.setEnabled(dataFound);
         add(algsMenuChoicesBox);
 
         JButton exportButton = new JButton("Export to CubeDB");
@@ -89,6 +116,7 @@ public class GUI extends JFrame implements ActionListener {
         JButton algsMenuButton = new JButton("Algorithms");
         algsMenuButton.setBounds(230, 570, 200, 40);
         algsMenuButton.addActionListener(this);
+        algsMenuButton.setEnabled(dataFound);
         add(algsMenuButton);
 
         // Drawing the cube

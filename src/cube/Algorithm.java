@@ -50,7 +50,7 @@ public class Algorithm {
             }
 
             // Check modifiers, if any
-            if (Character.isLowerCase(move.charAt(0))) isWide = true;
+            if (!(moveType instanceof Rotation.CubeRotation) && (Character.isLowerCase(move.charAt(0)))) isWide = true;
 
             if (isWide) {
                 switch (moveType) {
